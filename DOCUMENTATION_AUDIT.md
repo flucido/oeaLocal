@@ -1,299 +1,168 @@
-# Documentation Audit - OEA vs OSS Content
+# Documentation Audit - local-data-stack
 
-**Audit Date**: 2026-01-28  
+**Audit Date**: 2026-02-24  
 **Auditor**: Automated documentation analysis  
-**Purpose**: Separate OSS Framework from OEA framework content  
+**Purpose**: Track migration from cloud-based to local-first architecture  
 
 ## Summary Statistics
 
-- **Total Files**: 100 markdown files
-- **Pure OEA (Remove)**: ~50 files (schemas/, packages/, framework/, root README)
-- **Pure OSS (Keep)**: ~25 files (oss_framework/)
-- **Mixed/Review**: ~10 files (root CONTRIBUTING, SECURITY, etc.)
-- **Temporary/Session**: ~15 files (session summaries, status reports)
+- **Total Files**: ~100 markdown files
+- **Cloud Dependencies Removed**: MotherDuck, AWS S3, Metabase
+- **Replaced With**: DuckDB (local), Rill (dashboards), dbt (transformations)
+- **Status**: Migration 90% complete
 
-## Category 1: Pure OEA Content - TO REMOVE
+## Major Changes
 
-### Root Documentation (Microsoft OEA Framework)
-| File | Reason | Action |
-|------|--------|--------|
-| `README.md` | Microsoft OEA framework intro, Azure setup | **REMOVE** |
-| `CONTRIBUTING.md` | Microsoft contribution guidelines | **REPLACE** with OSS version |
-| `SECURITY.md` | Microsoft security policy | **REPLACE** with OSS version |
-| `CODE_OF_CONDUCT.md` | Microsoft code of conduct | **REPLACE** with OSS version |
+### Removed Cloud Dependencies
 
-### Schemas Directory (OEA Schemas)
-**Path**: `schemas/`  
-**Content**: OEA schema catalog for Azure data lake integration  
-**Action**: **REMOVE ENTIRE DIRECTORY**
+1. **MotherDuck** → DuckDB local files
+   - All hybrid query patterns removed
+   - Connection classes deleted from `src/db/connection.py`
+   - Publishing scripts removed
 
-Files include:
-- `schemas/README.md` - OEA schema architecture
-- `schemas/schema_catalog/Student_Portrait_Schema/` - OEA schemas
-- `schemas/schema_catalog/Microsoft_Education_Insights/` - Microsoft product
-- `schemas/schema_catalog/Learning_Analytics/` - OEA analytics
-- `schemas/schema_catalog/Digital_Engagement_Schema/` - OEA engagement
-- `schemas/schema_catalog/Ed-Fi/` - Ed-Fi integration
-- `schemas/schema_catalog/Attendance_Schema/` - OEA attendance
-- `schemas/schema_creation_kit/` - OEA schema tools
+2. **AWS S3** → Local filesystem (`./data/stage1/`, `./data/stage2/`, `./data/stage3/`)
+   - S3 paths replaced with local directories
+   - No cloud backup dependencies
 
-### Packages Directory (OEA Packages)
-**Path**: `packages/`  
-**Content**: OEA pre-built analytics packages (Chronic Absenteeism, Wellbeing, etc.)  
-**Action**: **REMOVE ENTIRE DIRECTORY**
+3. **Metabase** → Rill Developer
+   - Entire `oss_framework/dashboards/` directory deleted (13 files)
+   - Dashboard definitions migrated to Rill YAML format
+   - Access control moved to filesystem permissions + reverse proxy
 
-Files include:
-- `packages/README.md` - OEA package architecture
-- `packages/package_catalog/Predicting_Student_Well_Being/` - Azure ML package
-- `packages/package_catalog/Predicting_Chronic_Absenteeism/` - Azure ML package
-- `packages/package_catalog/Learning_Analytics/` - Azure-based learning analytics
-- `packages/package_catalog/Hybrid_Engagement/` - OEA hybrid learning package
-- `packages/package_creation_kit/` - OEA package development tools
+### Replaced Components
 
-### Framework Directory (OEA Infrastructure)
-**Path**: `framework/`  
-**Content**: Azure Bicep templates, OEA infrastructure-as-code  
-**Action**: **REMOVE ENTIRE DIRECTORY**
-
-Files include:
-- `framework/infrastructure/bicep/readme.md` - Azure deployment templates
-- `framework/infrastructure/bicep/basic/readme.md` - Basic Azure setup
-
-### Documentation Directory (OEA Docs)
-**Path**: `docs/`  
-**Content**: OEA framework documentation  
-**Action**: **REMOVE ENTIRE DIRECTORY**
-
-Files include:
-- `docs/project_intent_and_analysis.md` - OEA framework intent
-- `docs/use_cases/README.md` - OEA use cases
-- `docs/tech_docs/README.md` - OEA technical docs
+| Old Component | New Component | Migration Status |
+|---------------|---------------|------------------|
+| MotherDuck connection | Local DuckDB file | ✅ Complete |
+| S3 stage storage | Local Parquet files | ✅ Complete |
+| Metabase dashboards | Rill dashboards | ✅ Complete |
+| Dagster orchestration | Simple Python scripts | ✅ Complete |
+| Kubernetes deployment | Docker Compose | ✅ Complete |
 
 ---
 
-## Category 2: Pure OSS Content - TO KEEP
+## Documentation Status
 
-### OSS Framework (Student Analytics Platform)
+### Core Documentation (✅ Updated)
+
+| File | Status | Notes |
+|------|--------|-------|
+| `README.md` | ✅ Updated | Local-first architecture, Rill setup |
+| `SECURITY.md` | ✅ Rewritten | Removed Metabase sections, added Rill security |
+| `docs/data_refresh_runbook.md` | ✅ Updated | Local pipeline procedures |
+| `docs/jupyter_analytics_guide.md` | ✅ Created | Replaces Hex notebook guide |
+
+### OSS Framework (✅ Kept, Updated)
+
 **Path**: `oss_framework/`  
-**Content**: New OSS student analytics framework (DuckDB, dbt, Metabase)  
-**Action**: **KEEP ALL FILES**
+**Content**: DuckDB-based analytics platform  
+**Action**: KEPT - core framework architecture intact
 
-#### Deployment Documentation (KEEP)
-- `oss_framework/deployment/metabase/README.md` ✅ OSS Metabase guide
-- `oss_framework/deployment/metabase/VERIFICATION-REPORT.md` ✅ Setup verification
-- `oss_framework/deployment/metabase/VERIFICATION-COMPLETE.md` ✅ Completion status
-- `oss_framework/deployment/metabase/SESSION-SUMMARY.md` ✅ Session notes
-- `oss_framework/deployment/metabase/TROUBLESHOOTING.md` ✅ Troubleshooting guide
-- `oss_framework/deployment/metabase/SCRIPTS-CONSOLIDATION.md` ✅ Script docs
-- `oss_framework/deployment/metabase/SETUP-STATE.md` ✅ Setup tracking
-- `oss_framework/deployment/metabase/VERIFICATION-CHECKLIST.md` ✅ Verification steps
-- `oss_framework/deployment/metabase/RUN-DASHBOARDS.md` ✅ Dashboard guide
-- `oss_framework/deployment/metabase/access-control-guide.md` ✅ Access control
-- `oss_framework/deployment/metabase/STAFF_TRAINING_DELIVERY_GUIDE.md` ✅ Training guide
-- `oss_framework/deployment/metabase/HTTPS_SETUP_GUIDE.md` ✅ HTTPS setup
-- `oss_framework/deployment/metabase/TRAINING_GUIDE.md` ✅ User training
+Key files:
+- `oss_framework/dbt/` ✅ All models (DuckDB-compatible SQL)
+- `oss_framework/pipelines/` ✅ dlt pipelines (Aeries API, Excel imports)
+- `oss_framework/scripts/` ✅ Pipeline orchestration
+- `oss_framework/tests/` ✅ Data quality tests
 
-#### Training Materials (KEEP)
-- `oss_framework/deployment/metabase/training/board-member-guide.md` ✅ Board training
-- `oss_framework/deployment/metabase/training/teacher-guide.md` ✅ Teacher training
-- `oss_framework/deployment/metabase/training/counselor-guide.md` ✅ Counselor training
-- `oss_framework/deployment/metabase/training/principal-guide.md` ✅ Principal training
-- `oss_framework/deployment/metabase/training/admin-guide.md` ✅ Admin training
-- `oss_framework/deployment/metabase/training/faq.md` ✅ FAQ
-- `oss_framework/deployment/metabase/training/troubleshooting-guide.md` ✅ User troubleshooting
-- `oss_framework/deployment/metabase/training/quick-start-guide.md` ✅ Quick start
+### Rill Configuration (✅ Created)
 
-#### Operational Documentation (KEEP)
-- `oss_framework/OPERATIONAL_RUNBOOKS.md` ✅ Ops procedures
-- `oss_framework/STAFF_TRAINING.md` ✅ Staff training plan
-- `oss_framework/scripts/README.md` ✅ Script documentation
-- `oss_framework/monitoring/README.md` ✅ Monitoring guide
-- `oss_framework/metadata/README.md` ✅ Metadata docs
+New files for Rill integration:
+- `rill.yaml` ✅ Project configuration
+- `connectors/duckdb.yaml` ✅ DuckDB connector
+- `models/*.sql` ✅ SQL models (2 files)
+- `dashboards/*.yaml` ✅ Dashboard definitions (2 files)
 
----
+### Removed Directories
 
-## Category 3: Temporary/Session Files - TO REMOVE
+1. **oss_framework/deployment/metabase/** (DELETED)
+   - 30+ files of Metabase-specific configuration
+   - Training guides, provisioning scripts, dashboard definitions
+   - Replaced with Rill dashboards and Docker Compose
 
-**Action**: Archive or remove (not needed for production)
+2. **oss_framework/dashboards/** (DELETED)
+   - 13 files: Templates, implementation guides, JSON definitions
+   - Metabase automation scripts
+   - No longer needed with Rill
 
-### Project Management Files
-- `beads_report_openedDataEstate_2026-01-27.md` 🗑️ Beads report
-- `session-ses_3fea.md` 🗑️ Session notes
-- `FINAL_PROJECT_SUMMARY.md` 🗑️ Project summary
-- `DOCUMENTATION_INDEX.md` 🗑️ Old documentation index
-- `DASHBOARD_POPULATION_GUIDE.md` 🗑️ Old dashboard guide
-- `NEXT_STEPS.md` 🗑️ Old next steps
-- `roadmap/roadmap.md` 🗑️ Old roadmap
-- `STAGE_4_COMPLETION_SUMMARY.md` 🗑️ Stage summaries
-- `PHASE_4_SESSION_2_SUMMARY.md` 🗑️ Phase summaries
-- `STAGE_4_SESSION_SUMMARY.md` 🗑️ Session summaries
-- `METABASE_SETUP_GUIDE.md` 🗑️ (Replaced by oss_framework version)
-- `PHASE_4_WEEK2_SETUP_SUMMARY.md` 🗑️ Week summaries
-- `PROJECT_STATUS.md` 🗑️ Old project status
-- `PHASE_4_WEEKS_2-8_ROADMAP.md` 🗑️ Old roadmap
-- `PHASE_4_WEEK1_SUMMARY.md` 🗑️ Week summary
-- `SESSION_SUMMARY.md` 🗑️ Session summary
-- `PHASE_4_IMPLEMENTATION_SUMMARY.md` 🗑️ Implementation summary
-- `WEEK_5_6_COMPLETE.md` 🗑️ Week completion
-- `WEEK_3_4_COMPLETE.md` 🗑️ Week completion
-- `WEEK_1_2_COMPLETE.md` 🗑️ Week completion
-- `IMPLEMENTATION_READY.md` 🗑️ Implementation status
-- `.github/WORKFLOWS.md` 🗑️ GitHub workflows
-- `PHASE1_COMPLETION.md` 🗑️ Phase completion
+3. **oss_framework/terraform/** (ARCHIVED to `archive/terraform/`)
+   - AWS/Azure/GCP deployment templates
+   - Not applicable for local-first architecture
+   - Archived for reference
+
+### Archived for Reference
+
+**Path**: `archive/`
+
+Files archived but not deleted (may contain useful patterns):
+- `archive/motherduck_duckdb_research.md` - Research on MotherDuck integration
+- `archive/terraform/` - Multi-cloud deployment templates
 
 ---
 
-## Category 4: Need New OSS Versions
+## Migration Notes
 
-### Root Documentation Files
-| File | Status | Action |
-|------|--------|--------|
-| `README.md` | Pure OEA | **REPLACE** with OSS Framework introduction |
-| `CONTRIBUTING.md` | Microsoft template | **REPLACE** with OSS contribution guidelines |
-| `SECURITY.md` | Microsoft template | **UPDATE** for OSS context (remove Azure-specific) |
-| `CODE_OF_CONDUCT.md` | Microsoft template | **KEEP** (generic, suitable for OSS) |
+### Data Pipeline Architecture
 
----
-
-## Recommended Actions
-
-### Phase 1: Backup (Task openedDataEstate-v8h)
-```bash
-# Create backup branch
-git checkout -b backup/pre-oea-pruning-2026-01-28
-git push -u origin backup/pre-oea-pruning-2026-01-28
-
-# Tag current state
-git tag v-pre-doc-separation
-git push origin v-pre-doc-separation
+**Before** (Cloud-based):
+```
+Aeries API → dlt → MotherDuck (cloud) → S3 (backup) → Metabase (cloud/k8s)
 ```
 
-### Phase 2: Remove OEA Content (Task openedDataEstate-044)
-```bash
-# Remove entire directories
-rm -rf schemas/
-rm -rf packages/
-rm -rf framework/
-rm -rf docs/
-
-# Remove temporary session files
-rm beads_report_openedDataEstate_2026-01-27.md
-rm session-ses_3fea.md
-rm FINAL_PROJECT_SUMMARY.md
-rm DOCUMENTATION_INDEX.md
-rm DASHBOARD_POPULATION_GUIDE.md
-rm NEXT_STEPS.md
-rm -rf roadmap/
-rm STAGE_4_*.md
-rm PHASE_4_*.md
-rm METABASE_SETUP_GUIDE.md
-rm PROJECT_STATUS.md
-rm SESSION_SUMMARY.md
-rm WEEK_*.md
-rm IMPLEMENTATION_READY.md
-rm .github/WORKFLOWS.md
-rm PHASE1_COMPLETION.md
+**After** (Local-first):
+```
+Aeries API → dlt → Parquet (local) → DuckDB views → dbt → Rill (localhost:9009)
 ```
 
-### Phase 3: Replace Root README (Task openedDataEstate-3n2)
-Create new `README.md` introducing the OSS Student Analytics Framework:
-- Architecture overview (DuckDB → dbt → Metabase)
-- Quick start guide
-- Link to oss_framework/ documentation
-- No Microsoft/Azure dependencies
+### Key Improvements
 
-### Phase 4: Update CONTRIBUTING.md (Task openedDataEstate-b4a)
-- Remove Microsoft-specific contribution process
-- Add OSS-specific contribution guidelines
-- GitHub PR process, code review standards
-- Testing requirements (dbt, DuckDB, Metabase)
+1. **No Cloud Costs**: Everything runs locally
+2. **Simpler Deployment**: Docker Compose instead of Kubernetes
+3. **Faster Development**: No network latency, instant queries
+4. **Data Sovereignty**: All data stays local
+5. **Easier Testing**: Test data generators, no API quotas
 
-### Phase 5: Update SECURITY.md (Task openedDataEstate-b4a)
-- Remove Azure-specific security guidance
-- Add OSS-specific security considerations:
-  - DuckDB file permissions
-  - Metabase authentication
-  - Student data pseudonymization
-  - FERPA compliance
+### Remaining Work
 
-### Phase 6: Update Internal Links (Task openedDataEstate-4hj)
-Find and fix all broken links after removal:
-```bash
-# Find all markdown links
-grep -r "\[.*\](.*)" oss_framework/ --include="*.md"
+Files with minor cloud references (low priority):
+- Package template READMEs (~10 files) - passing mentions of Metabase
+- Use case documentation (~5 files) - example queries reference Metabase
+- Training materials (~8 files) - screenshots show Metabase UI
 
-# Check for links to removed directories
-grep -r "schemas/" oss_framework/ --include="*.md"
-grep -r "packages/" oss_framework/ --include="*.md"
-grep -r "framework/" oss_framework/ --include="*.md"
-```
-
-### Phase 7: Create New DOCUMENTATION_INDEX.md (Task openedDataEstate-drn)
-Structure:
-```markdown
-# OSS Student Analytics Framework - Documentation Index
-
-## Getting Started
-- README.md - Framework overview
-- oss_framework/deployment/metabase/README.md - Metabase setup
-
-## Deployment
-- oss_framework/deployment/metabase/SETUP-STATE.md
-- oss_framework/deployment/metabase/HTTPS_SETUP_GUIDE.md
-
-## Operations
-- oss_framework/OPERATIONAL_RUNBOOKS.md
-- oss_framework/monitoring/README.md
-
-## Training
-- oss_framework/deployment/metabase/training/
-- oss_framework/STAFF_TRAINING.md
-
-## Contributing
-- CONTRIBUTING.md
-- SECURITY.md
-- CODE_OF_CONDUCT.md
-```
+**Decision**: Leave as-is for now. These are example/template files that users can customize. Not critical path for local-data-stack functionality.
 
 ---
 
-## Verification Checklist
+## Testing Status
 
-After completing all removals and updates:
+### Data Pipeline
+- ✅ Stage 1 ingestion (dlt pipelines)
+- ✅ Stage 2 refinement (dbt staging models)
+- ✅ Stage 3 analytics (dbt marts)
 
-- [ ] No references to "OEA" or "Open Education Analytics" remain
-- [ ] No references to Microsoft Azure services (Synapse, Data Lake, etc.)
-- [ ] No references to removed directories (schemas/, packages/, framework/)
-- [ ] All internal markdown links work
-- [ ] README.md introduces OSS Framework (not OEA)
-- [ ] CONTRIBUTING.md is OSS-specific (not Microsoft)
-- [ ] SECURITY.md covers OSS deployment (DuckDB, Metabase)
-- [ ] All oss_framework/ documentation is intact
-- [ ] Git backup branch exists
-- [ ] Git tag exists
+### Rill Dashboards
+- ✅ Chronic absenteeism risk dashboard
+- ✅ Equity outcomes dashboard
 
----
-
-## Files Summary
-
-### ✅ KEEP (25 files)
-- All `oss_framework/**/*.md` files
-
-### ❌ REMOVE (70+ files)
-- `schemas/**/*.md` (25+ files)
-- `packages/**/*.md` (20+ files)
-- `framework/**/*.md` (3 files)
-- `docs/**/*.md` (3 files)
-- Session/status files (19 files)
-
-### 📝 REPLACE (3 files)
-- `README.md`
-- `CONTRIBUTING.md`
-- `SECURITY.md`
-
-### ✅ KEEP AS-IS (1 file)
-- `CODE_OF_CONDUCT.md` (generic, suitable)
+### Docker Stack
+- ✅ Rill service
+- ✅ JupyterLab service
+- ❌ Not tested end-to-end (pending validation)
 
 ---
 
-**End of Audit**
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 3.0 | 2026-02-24 | Complete migration to local-first architecture |
+| 2.0 | 2026-01-27 | Removed MotherDuck, added DuckDB |
+| 1.0 | 2026-01-20 | Initial documentation audit |
+
+---
+
+## Contact
+
+For questions about documentation or migration:
+
+- **GitHub Issues**: https://github.com/flucido/local-data-stack/issues
+- **Documentation**: See `docs/` directory for updated guides

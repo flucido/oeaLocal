@@ -1,0 +1,143 @@
+Metadata-Version: 2.4
+Name: local-data-stack
+Version: 0.1.0
+Summary: 100% local education analytics stack with DuckDB, dbt, and Rill - no cloud dependencies
+Author-email: Frank Lucido <frank@flucido.com>
+License: MIT
+Project-URL: Homepage, https://github.com/flucido/local-data-stack
+Project-URL: Documentation, https://github.com/flucido/local-data-stack/tree/main/docs
+Project-URL: Repository, https://github.com/flucido/local-data-stack
+Project-URL: Issues, https://github.com/flucido/local-data-stack/issues
+Keywords: education,analytics,student-data,duckdb,rill,local-first
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Education
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Education
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: LICENSE-CODE
+Requires-Dist: duckdb>=0.9.0
+Requires-Dist: dbt-duckdb>=1.6.0
+Requires-Dist: dlt[all]>=0.5.0
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: pyarrow>=12.0.0
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: openpyxl>=3.1.0
+Requires-Dist: deltalake>=0.10.0
+Requires-Dist: sqlalchemy>=2.0.0
+Requires-Dist: psycopg2-binary>=2.9.0
+Requires-Dist: flask>=2.3.0
+Requires-Dist: fastapi>=0.100.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: requests>=2.31.0
+Requires-Dist: tqdm>=4.65.0
+Requires-Dist: cryptography>=41.0.0
+Requires-Dist: passlib>=1.7.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Requires-Dist: mypy>=1.5.0; extra == "dev"
+Requires-Dist: pre-commit>=3.5.0; extra == "dev"
+Provides-Extra: jupyter
+Requires-Dist: jupyter>=1.0.0; extra == "jupyter"
+Requires-Dist: jupyterlab>=4.0.0; extra == "jupyter"
+Requires-Dist: ipywidgets>=8.0.0; extra == "jupyter"
+Provides-Extra: all
+Requires-Dist: oss-framework[dev,jupyter]; extra == "all"
+Dynamic: license-file
+
+# local-data-stack
+
+100% local education analytics platform with DuckDB, dbt, and Rill. No cloud dependencies.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](docs/README.md)
+
+## Why this project exists
+
+`local-data-stack` provides a complete local analytics stack:
+
+- **Data ingestion** from Aeries API and Excel imports
+- **DuckDB + Delta/Parquet** lakehouse storage (all local)
+- **dbt transformations** for data modeling
+- **Rill dashboards** for BI and analytics
+- **Simple orchestration** with Python scripts (no Dagster)
+
+## Repository layout
+
+```text
+local-data-stack/
+-- oss_framework/               # Core pipelines and transformations
+-- src/                         # Database connection utilities
+-- rill.yaml                    # Rill project configuration
+-- connectors/                  # Rill connector configs
+-- models/                      # Rill SQL models
+-- metrics/                     # Rill dashboard definitions
+-- scripts/                     # Orchestration scripts
+-- data/                        # Local data storage (stage1, stage2, stage3)
+-- README.md                    # Project overview (this file)
+
+## Quick start
+
+### 1) Clone the repository
+
+```bash
+git clone https://github.com/flucido/local-data-stack.git
+cd local-data-stack
+
+### 2) Install Python dependencies
+
+```bash
+pip install -e .
+
+### 3) Configure environment
+
+From the repository root, copy the template and fill in your values:
+
+```bash
+cp .env.template .env
+# Edit .env with your Aeries API credentials
+
+### 4) Install Rill
+
+```bash
+curl https://rill.sh | sh
+rill version
+
+### 5) Run the data pipeline
+
+```bash
+python scripts/run_pipeline.py
+```
+
+### 6) Start Rill Developer
+
+```bash
+rill start
+# Opens http://localhost:9009
+```
+
+## Core docs
+
+- **Setup guide:** [docs/SETUP.md](docs/SETUP.md)
+- **Architecture:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- **Rill guide:** [docs/RILL_GUIDE.md](docs/RILL_GUIDE.md)
+
+## Forked from openedDataEstate
+
+This project is a local-only fork of [openedDataEstate](https://github.com/flucido/openedDataEstate), removing all cloud dependencies (MotherDuck, AWS S3) and replacing Metabase with Rill.
+
+## License
+
+- **Code:** [MIT License](LICENSE)
+- **Documentation:** [Creative Commons Attribution 4.0](LICENSE)
