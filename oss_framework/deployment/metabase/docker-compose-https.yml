@@ -1,0 +1,68 @@
+# HTTPS/SSL Configuration for Metabase
+version: '3.8'
+
+services:
+  # Nginx Reverse Proxy with SSL
+  nginx:
+    image: nginx:alpine
+    container_name: oss-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl/:/etc/nginx/ssl/:ro
+      - ./html/:/usr/share/nginx/html/:ro
+    networks:
+      - metabase-network
+    depends_on:
+      - metabase
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Metabase (Backend)
+  metabase:
+    image: metabase/metabase:v0.49.1
+    container_name: oss-metabase-backend
+    expose:
+      - "3000"
+    volumes:
+      - metabase-db:/metabase.db
+      - metabase-data:/data
+    environment:
+      MB_DB_TYPE: h2
+      MB_JAVA_TIMEZONE: UTC
+      MB_ADMIN_EMAIL: admin@oss-framework.local
+      MB_ADMIN_PASSWORD: OSSMetabase2024!Secure
+    networks:
+      - metabase-network
+    depends_on:
+      - metabase-wait
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Startup dependency (ensures metabase is ready)
+  metabase-wait:
+    image: busybox:latest
+    container_name: oss-metabase-wait
+    command: /bin/true
+    networks:
+      - metabase-network
+
+networks:
+  metabase-network:
+    driver: bridge
+
+volumes:
+  metabase-db:
+    driver: local
+  metabase-data:
+    driver: local

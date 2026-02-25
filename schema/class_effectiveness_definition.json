@@ -1,0 +1,66 @@
+{
+  "name": "Class Effectiveness & Teacher Quality",
+  "description": "Class-level learning outcomes with teacher-restricted data access",
+  "type": "class_effectiveness",
+  "target_audience": [
+    "Teachers",
+    "Instructional Coaches"
+  ],
+  "refresh_interval_minutes": 5,
+  "row_level_security": true,
+  "rbac_column": "teacher_id",
+  "tabs": [
+    {
+      "name": "My Classes",
+      "cards": [
+        {
+          "position": [
+            0,
+            0
+          ],
+          "size": [
+            12,
+            5
+          ],
+          "title": "Class Performance vs Peer Average",
+          "query": "SELECT \n                                class_id as \"Class ID\",\n                                subject as \"Subject\",\n                                ROUND(avg_student_learning_gain, 2) as \"Learning Gain %\",\n                                ROUND(peer_avg_learning_gain, 2) as \"Peer Average %\",\n                                ROUND(avg_student_learning_gain - peer_avg_learning_gain, 2) as \"Difference\",\n                                COUNT(DISTINCT student_id) as \"Student Count\"\n                            FROM main_main_analytics.v_class_section_comparison\n                            GROUP BY class_id, subject, avg_student_learning_gain, peer_avg_learning_gain\n                            ORDER BY avg_student_learning_gain DESC",
+          "visualization_type": "table",
+          "settings": {}
+        }
+      ]
+    },
+    {
+      "name": "Peer Comparison",
+      "cards": [
+        {
+          "position": [
+            0,
+            0
+          ],
+          "size": [
+            6,
+            4
+          ],
+          "title": "My Classes (Top 10)",
+          "query": "SELECT \n                                class_id,\n                                ROUND(avg_student_learning_gain, 1) as learning_gain\n                            FROM main_main_analytics.v_class_section_comparison\n                            GROUP BY class_id, avg_student_learning_gain\n                            ORDER BY avg_student_learning_gain DESC\n                            LIMIT 10",
+          "visualization_type": "bar",
+          "settings": {}
+        },
+        {
+          "position": [
+            0,
+            6
+          ],
+          "size": [
+            6,
+            4
+          ],
+          "title": "Student Growth Trajectory",
+          "query": "SELECT \n                                ROUND(avg_student_learning_gain / 10) * 10 as gain_range,\n                                COUNT(*) as class_count\n                            FROM main_main_analytics.v_class_section_comparison\n                            GROUP BY ROUND(avg_student_learning_gain / 10) * 10\n                            ORDER BY gain_range",
+          "visualization_type": "bar",
+          "settings": {}
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+
+# profiles.yml - DuckDB Connection Configuration
+# This file configures dbt to connect to DuckDB
+
+duckdb_oss:
+  target: 'dev'
+  
+  outputs:
+    # Development environment
+    dev:
+      type: 'duckdb'
+      path: '../data/oea.duckdb'
+      threads: 4
+      timeout_seconds: 300
+      
+      # DuckDB-specific settings
+      settings:
+        threads: 4
+        memory_limit: '8GB'
+        max_memory: '8GB'
+        default_null_order: 'nulls_last'
+      
+      # Extensions to load
+      extensions:
+        - delta
+        - httpfs
+        - json
+    
+    # Production environment (optional, same path for now)
+    prod:
+      type: 'duckdb'
+      path: '../data/oea.duckdb'
+      threads: 8
+      timeout_seconds: 300
+      
+      settings:
+        threads: 8
+        memory_limit: '16GB'
+        max_memory: '16GB'
+        default_null_order: 'nulls_last'
+      
+      extensions:
+        - delta
+        - httpfs
+        - json
+    
+    # MotherDuck environment (cloud)
+    motherduck:
+      type: 'duckdb'
+      path: 'md:aeries_data_mart?dbinstance_inactivity_ttl=0s'
+      motherduck_token: '{{ env_var("MOTHERDUCK_TOKEN") }}'
+      threads: 8
+      timeout_seconds: 300
+      
+      # DuckDB-specific settings for MotherDuck
+      settings:
+        threads: 8
+        memory_limit: '8GB'
+        max_memory: '8GB'
+        default_null_order: 'nulls_last'
+      
+      # Extensions to load
+      extensions:
+        - delta
+        - httpfs
+        - json

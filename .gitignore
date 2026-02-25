@@ -1,0 +1,43 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+data/
+
+# bv (beads viewer) local config and caches
+.bv/
+.beads/
+
+# macOS
+.DS_Store
+
+# Environment files (contain credentials)
+.env
+
+# Firebase
+firebase-debug.log
+
+# Metabase sample database
+*.db.mv.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build artifacts
+target/
+logs/
+*.log
+.coverage
+
+# DuckDB databases (local dev only)
+*.duckdb
+*.db
+!*.db.mv.db  # Keep Metabase sample DB
+
+# Python cache
+__pycache__/
+.pytest_cache/
+.mypy_cache/
