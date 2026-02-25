@@ -17,19 +17,22 @@ import pandas as pd
 # Ensure imports work when running directly from repo root
 sys.path.append(os.getcwd())
 
-from src.db.connection import DuckDBConnection
+from src.db.connection import get_connection
 
 
 def fetch_attendance_gpa(connection) -> pd.DataFrame:
     """
-    Fetch attendance rate and GPA joined on student_id from Stage 2 Delta tables.
+    Fetch attendance rate and GPA joined on student_id from local Delta tables.
 
-    The query reads directly from the DuckLake S3 paths using delta_scan.
+    Reads from local Delta Lake directories in data/stage2/.
     """
-    query = """
+    # Use environment variables for stage paths with sensible defaults
+    stage2_path = os.getenv('STAGE2_PATH', './data/stage2')
+    
+    query = f"""
         SELECT a.attendance_rate, g.gpa
-        FROM delta_scan('s3://oea-lake/stage2/Refined/sis/attendance') a
-        JOIN delta_scan('s3://oea-lake/stage2/Refined/sis/grades') g
+        FROM delta_scan('{stage2_path}/ingested/aeries_attendance') a
+        JOIN delta_scan('{stage2_path}/ingested/aeries_grades') g
           ON a.student_id = g.student_id
         WHERE a.attendance_rate IS NOT NULL
           AND g.gpa IS NOT NULL
@@ -66,10 +69,9 @@ def plot_attendance_vs_gpa(df: pd.DataFrame, output_path: Optional[str] = None) 
 
 
 def main(output_path: Optional[str] = None) -> None:
-    db = DuckDBConnection()
-    conn = db.get_connection()
-
-    print("Querying attendance and GPA data from DuckLake...")
+    conn = get_connection()
+    
+    print("Querying attendance and GPA data from local Delta tables...")
     df = fetch_attendance_gpa(conn)
     print(f"Retrieved {len(df)} records.")
 

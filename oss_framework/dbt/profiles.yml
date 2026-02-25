@@ -1,6 +1,5 @@
-
-# profiles.yml - DuckDB Connection Configuration
-# This file configures dbt to connect to DuckDB
+# Local DuckDB Configuration
+# All data processing happens locally with DuckDB's embedded engine
 
 duckdb_oss:
   target: 'dev'
@@ -26,7 +25,7 @@ duckdb_oss:
         - httpfs
         - json
     
-    # Production environment (optional, same path for now)
+    # Production environment
     prod:
       type: 'duckdb'
       path: '../data/oea.duckdb'
@@ -39,27 +38,6 @@ duckdb_oss:
         max_memory: '16GB'
         default_null_order: 'nulls_last'
       
-      extensions:
-        - delta
-        - httpfs
-        - json
-    
-    # MotherDuck environment (cloud)
-    motherduck:
-      type: 'duckdb'
-      path: 'md:aeries_data_mart?dbinstance_inactivity_ttl=0s'
-      motherduck_token: '{{ env_var("MOTHERDUCK_TOKEN") }}'
-      threads: 8
-      timeout_seconds: 300
-      
-      # DuckDB-specific settings for MotherDuck
-      settings:
-        threads: 8
-        memory_limit: '8GB'
-        max_memory: '8GB'
-        default_null_order: 'nulls_last'
-      
-      # Extensions to load
       extensions:
         - delta
         - httpfs

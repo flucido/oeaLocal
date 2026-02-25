@@ -1,0 +1,18 @@
+# Rill project configuration for local-data-stack
+# 100% local analytics with DuckDB backend
+
+compiler: rillv1
+display_name: "Local Education Analytics"
+description: "Student analytics dashboard powered by local DuckDB data mart"
+
+# DuckDB connector (defined in connectors/duckdb.yaml)
+olap_connector: duckdb
+
+# Optional: configure the development server
+server:
+  port: 9009
+  host: localhost
+
+# Optional: configure the AI features (disabled for local-only use)
+ai:
+  enabled: false

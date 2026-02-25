@@ -1,8 +1,10 @@
 
+# dbt_project.yml - Local Data Stack Analytics
+# 100% local DuckDB transformations - no cloud dependencies
 # dbt_project.yml - OSS Framework Student Analytics
 # Stage 2 Feature Engineering Configuration
 
-name: 'oea_student_analytics'
+name: 'local_data_stack'
 version: '1.0.0'
 config-version: 2
 
@@ -26,7 +28,7 @@ clean-targets:
 
 # Seeding
 seeds:
-  oea_student_analytics:
+  local_data_stack:
     +schema: 'seeds'
     school_cds_mapping_seed:
       +column_types:
@@ -37,7 +39,7 @@ seeds:
 
 # Model defaults
 models:
-  oea_student_analytics:
+  local_data_stack:
     # Global defaults
     +enabled: true
     +on_schema_change: 'fail'

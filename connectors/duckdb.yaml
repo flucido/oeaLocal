@@ -1,0 +1,36 @@
+# DuckDB connector for Rill
+# Connects to the local DuckDB database created by dbt
+
+type: connector
+driver: duckdb
+
+# Connection configuration
+# Uses environment variable DUCKDB_DATABASE_PATH with fallback
+dsn: "{{ env \"DUCKDB_DATABASE_PATH\" \"./oss_framework/data/oea.duckdb\" }}"
+
+# Initialization SQL - load extensions and configure DuckDB
+init_sql: |
+  -- Load Delta extension for reading Delta Lake tables
+  INSTALL delta;
+  LOAD delta;
+  
+  -- Load httpfs for potential remote file access
+  INSTALL httpfs;
+  LOAD httpfs;
+  
+  -- Load JSON extension
+  INSTALL json;
+  LOAD json;
+  
+  -- Set memory limits (8GB for development)
+  SET memory_limit='8GB';
+  SET max_memory='8GB';
+  
+  -- Configure for analytics workloads
+  SET threads=4;
+  SET default_null_order='nulls_last';
+
+# Connection pooling (optional for local use)
+pool:
+  max_size: 4
+  max_idle_time: 300s
