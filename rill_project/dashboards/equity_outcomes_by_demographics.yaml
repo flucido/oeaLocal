@@ -55,7 +55,3 @@ measures:
     expression: AVG(pct_below_c) / 100.0
     format_preset: percentage
 
-# Default sorting by cohort size
-default_sort:
-  - name: cohort_size
-    desc: true

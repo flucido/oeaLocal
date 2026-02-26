@@ -6,6 +6,9 @@ version: 2
 sources:
   - name: raw
     description: Stage 1 raw landing zone tables from Aeries SIS
+    database: oea
+    description: Stage 1 raw landing zone tables from Aeries SIS
+    description: Stage 1 raw landing zone tables from Aeries SIS
     schema: main
 
     freshness:

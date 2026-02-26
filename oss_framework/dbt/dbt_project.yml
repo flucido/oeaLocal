@@ -100,9 +100,15 @@ models:
         +materialized: table
         +post-hook: "ANALYZE {{ this }}"
       analytics:
+        +schema: 'analytics'
         +materialized: table
         +post-hook: "ANALYZE {{ this }}"
 
+    # Export layer - Rill Parquet exports
+    exports:
+      +materialized: external
+      +tags: ['rill_export']
+      +format: 'parquet'
 # Variable defaults
 vars:
   salt_pii: 'oea_2026'

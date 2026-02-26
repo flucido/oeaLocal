@@ -77,23 +77,23 @@ class PerformanceTest:
         queries = {
             "At-Risk Count": """
                 SELECT COUNT(DISTINCT student_key) as count
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
                 WHERE risk_level IN ('High', 'Critical')
             """,
             "Chronic Rate": """
                 SELECT ROUND(
                     COUNT(CASE WHEN risk_level != 'Low' THEN 1 END) * 100.0 / 
                     COUNT(DISTINCT student_key), 1) as rate
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
             """,
             "Risk Distribution": """
                 SELECT risk_level, COUNT(DISTINCT student_key) as count
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
                 GROUP BY risk_level
             """,
             "Top At-Risk Students": """
                 SELECT student_key, risk_level, attendance_rate_30d
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
                 WHERE risk_level IN ('High', 'Critical')
                 ORDER BY chronic_absenteeism_risk_score DESC
                 LIMIT 50
@@ -101,7 +101,7 @@ class PerformanceTest:
             "By Grade Analysis": """
                 SELECT grade_level, COUNT(DISTINCT student_key) as total,
                     COUNT(CASE WHEN risk_level = 'High' THEN 1 END) as high_count
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
                 GROUP BY grade_level
             """,
         }
@@ -120,10 +120,10 @@ class PerformanceTest:
         queries = {
             "Wellbeing Profile Count": """
                 SELECT COUNT(*) as count
-                FROM main_main_analytics.v_wellbeing_risk_profiles
+                FROM main_analytics.v_wellbeing_risk_profiles
             """,
             "Wellbeing Sample": """
-                SELECT * FROM main_main_analytics.v_wellbeing_risk_profiles LIMIT 100
+                SELECT * FROM main_analytics.v_wellbeing_risk_profiles LIMIT 100
             """,
         }
 
@@ -141,7 +141,7 @@ class PerformanceTest:
         queries = {
             "Equity Data Load": """
                 SELECT COUNT(*) as count
-                FROM main_main_analytics.v_equity_outcomes_by_demographics
+                FROM main_analytics.v_equity_outcomes_by_demographics
             """
         }
 

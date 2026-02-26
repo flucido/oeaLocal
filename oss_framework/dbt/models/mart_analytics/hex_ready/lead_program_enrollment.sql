@@ -4,7 +4,7 @@
 
 {{ config(
     materialized='table',
-    schema='main_main_analytics',
+    schema='analytics',
     tags=['analytics', 'hex', 'lead']
 ) }}
 

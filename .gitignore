@@ -41,3 +41,8 @@ logs/
 __pycache__/
 .pytest_cache/
 .mypy_cache/
+
+# Rill temporary files
+rill_project/tmp/
+rill_project/**/*.db.wal
+coverage.xml

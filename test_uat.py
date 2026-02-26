@@ -75,7 +75,7 @@ class Phase1FunctionalTesting:
             for view in views:
                 try:
                     result = conn.execute(
-                        f"SELECT COUNT(*) as count FROM main_main_analytics.{view}"
+                        f"SELECT COUNT(*) as count FROM main_analytics.{view}"
                     ).fetchall()
                     count = result[0][0]
                     print(f"  ✓ {view}: {count:,} records")

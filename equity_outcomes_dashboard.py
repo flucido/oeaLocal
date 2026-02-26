@@ -32,7 +32,7 @@ class EquityOutcomesAnalysisDashboardDashboard:
         try:
             self.conn = duckdb.connect(self.db_path, read_only=True)
             result = self.conn.execute(
-                "SELECT COUNT(*) as count FROM main_main_analytics.v_equity_outcomes_by_demographics"
+                "SELECT COUNT(*) as count FROM main_analytics.v_equity_outcomes_by_demographics"
             ).fetchall()
             count = result[0][0] if result else 0
             print(f"✓ Connected to DuckDB. Found {count} records.")
@@ -44,7 +44,7 @@ class EquityOutcomesAnalysisDashboardDashboard:
     def load_data(self) -> dict:
         try:
             data = {}
-            query = "SELECT * FROM main_main_analytics.v_equity_outcomes_by_demographics LIMIT 100"
+            query = "SELECT * FROM main_analytics.v_equity_outcomes_by_demographics LIMIT 100"
             data['records'] = pd.DataFrame(self.conn.execute(query).fetchall())
             print("✓ All data loaded")
             return data

@@ -41,7 +41,7 @@ class ChronicAbsenteeismDashboard:
 
             # Verify data is accessible
             result = self.conn.execute(
-                "SELECT COUNT(*) as count FROM main_main_analytics.v_chronic_absenteeism_risk"
+                "SELECT COUNT(*) as count FROM main_analytics.v_chronic_absenteeism_risk"
             ).fetchall()
 
             count = result[0][0] if result else 0
@@ -59,7 +59,7 @@ class ChronicAbsenteeismDashboard:
             # 1. Students at risk (High/Critical)
             query = """
                 SELECT COUNT(DISTINCT student_key) as count
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
                 WHERE risk_level IN ('High', 'Critical')
             """
             data["at_risk_count"] = self.conn.execute(query).fetchall()[0][0]
@@ -72,14 +72,14 @@ class ChronicAbsenteeismDashboard:
                         COUNT(DISTINCT student_key),
                         1
                     ) as rate
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
             """
             data["chronic_rate"] = self.conn.execute(query).fetchall()[0][0]
 
             # 3. Declining attendance
             query = """
                 SELECT COUNT(DISTINCT student_key) as count
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
                 WHERE attendance_trend_90d = 'declining'
             """
             data["declining_count"] = self.conn.execute(query).fetchall()[0][0]
@@ -87,7 +87,7 @@ class ChronicAbsenteeismDashboard:
             # 4. Risk distribution
             query = """
                 SELECT risk_level, COUNT(DISTINCT student_key) as count
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
                 GROUP BY risk_level
                 ORDER BY risk_level
             """
@@ -103,7 +103,7 @@ class ChronicAbsenteeismDashboard:
                     ROUND(attendance_rate_30d, 1) as absence_rate,
                     attendance_trend_90d as trend,
                     COALESCE(_loaded_at::varchar, 'N/A') as last_update
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
                 WHERE risk_level IN ('High', 'Critical')
                 ORDER BY chronic_absenteeism_risk_score DESC
                 LIMIT 50
@@ -127,7 +127,7 @@ class ChronicAbsenteeismDashboard:
                     COUNT(CASE WHEN risk_level = 'High' THEN 1 END) as high_count,
                     COUNT(CASE WHEN risk_level = 'Critical' THEN 1 END) as critical_count,
                     ROUND(AVG(CASE WHEN attendance_trend_90d = 'declining' THEN 1 ELSE 0 END) * 100, 1) as pct_declining
-                FROM main_main_analytics.v_chronic_absenteeism_risk
+                FROM main_analytics.v_chronic_absenteeism_risk
                 GROUP BY grade_level
                 ORDER BY grade_level
             """

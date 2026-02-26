@@ -1,6 +1,6 @@
 {{ config(
     materialized='table',
-    schema='main_main_analytics',
+    schema='analytics',
     unique_id='agg_discipline_windows'
 ) }}
 

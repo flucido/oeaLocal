@@ -106,14 +106,14 @@ class PipelineOrchestrator:
 
         if aeries_pipeline.exists():
             success = success and self.run_command(
-                f"python {aeries_pipeline}", "Aeries API ingestion (dlt)"
+                f"python3 {aeries_pipeline}", "Aeries API ingestion (dlt)"
             )
         else:
             self.log(f"Skipping: {aeries_pipeline} not found", "WARNING")
 
         if excel_pipeline.exists():
             success = success and self.run_command(
-                f"python {excel_pipeline}", "Excel imports ingestion (dlt)"
+                f"python3 {excel_pipeline}", "Excel imports ingestion (dlt)"
             )
         else:
             self.log(f"Skipping: {excel_pipeline} not found", "WARNING")
@@ -132,8 +132,8 @@ class PipelineOrchestrator:
         self.log("=== STAGE 2: DATA REFINEMENT ===")
 
         return self.run_command(
-            "dbt run --select tag:staging",
-            "dbt refinement models (staging layer)",
+            "/Users/flucido/projects/local-data-stack/.venv/bin/dbt run --project-dir . --profiles-dir . --select tag:staging",
+            "/Users/flucido/projects/local-data-stack/.venv/bin/dbt refinement models (staging layer)",
             workdir=self.dbt_project_dir,
         )
 
@@ -152,42 +152,59 @@ class PipelineOrchestrator:
 
         # Seed required mapping tables first
         success = self.run_command(
-            "dbt seed --select school_cds_mapping_seed",
-            "dbt seed school mapping table",
+            "/Users/flucido/projects/local-data-stack/.venv/bin/dbt seed --project-dir . --profiles-dir . --select school_cds_mapping_seed",
+            "/Users/flucido/projects/local-data-stack/.venv/bin/dbt seed school mapping table",
             workdir=self.dbt_project_dir,
         )
 
         # Build privacy layer required by core marts
         if success:
             success = success and self.run_command(
-                "dbt run --select mart_privacy",
-                "dbt privacy pseudonymization models",
+                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt run --project-dir . --profiles-dir . --select mart_privacy",
+                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt privacy pseudonymization models",
                 workdir=self.dbt_project_dir,
             )
 
         # Run core marts
         if success:
             success = success and self.run_command(
-                "dbt run --select mart_core",
-                "dbt core dimension/fact tables",
+                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt run --project-dir . --profiles-dir . --select mart_core",
+                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt core dimension/fact tables",
                 workdir=self.dbt_project_dir,
             )
 
         # Then features, scoring, and analytics
         if success:
             success = success and self.run_command(
-                "dbt run --select mart_features mart_scoring mart_analytics",
-                "dbt analytics models",
+                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt run --project-dir . --profiles-dir . --select mart_features mart_scoring mart_analytics",
+                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt analytics models",
                 workdir=self.dbt_project_dir,
             )
 
         return success
 
+    def stage4_export(self) -> bool:
+        """Stage 4: Export analytics to Parquet for Rill."""
+        self.log("=== STAGE 4: EXPORTING ANALYTICS TO PARQUET FOR RILL ===")
+
+        export_cmd = (
+            "/Users/flucido/projects/local-data-stack/.venv/bin/dbt run "
+            "--project-dir . "
+            "--profiles-dir . "
+            "--select tag:rill_export"
+        )
+
+        return self.run_command(
+            export_cmd,
+            "Rill Parquet exports (analytics layer)",
+            workdir=self.dbt_project_dir,
+        )
+
     def run_tests(self) -> bool:
         """Run dbt tests to validate data quality."""
         self.log("=== RUNNING DATA QUALITY TESTS ===")
 
-        return self.run_command("dbt test", "dbt data quality tests", workdir=self.dbt_project_dir)
+        return self.run_command("/Users/flucido/projects/local-data-stack/.venv/bin/dbt test", "/Users/flucido/projects/local-data-stack/.venv/bin/dbt data quality tests", workdir=self.dbt_project_dir)
 
     def run_full_pipeline(self, skip_tests: bool = False) -> bool:
         """
@@ -218,6 +235,10 @@ class PipelineOrchestrator:
             self.log("Pipeline failed at Stage 3 (Analytics)", "ERROR")
             return False
 
+        # Stage 4: Export to Parquet
+        if not self.stage4_export():
+            self.log("Pipeline failed at Stage 4 (Export)", "ERROR")
+            return False
         # Tests (optional)
         if not skip_tests:
             if not self.run_tests():

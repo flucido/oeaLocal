@@ -1,6 +1,6 @@
 {{ config(
     materialized='table',
-    schema='main_main_analytics'
+    schema='analytics'
 ) }}
 
 -- NOTE: fact_attendance provides annual-grain summaries. Internal metrics are

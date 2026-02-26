@@ -81,7 +81,7 @@ measures:
 
   - name: avg_risk_score
     label: "Avg Risk Score"
-    expression: AVG(composite_risk_score)
+    expression: AVG(chronic_absenteeism_risk_score)
     format_preset: humanize
 
   - name: high_risk_students
@@ -89,7 +89,3 @@ measures:
     expression: SUM(CASE WHEN risk_level = 'High' THEN 1 ELSE 0 END)
     format_preset: humanize
 
-# Default sorting
-default_sort:
-  - name: composite_risk_score
-    desc: true

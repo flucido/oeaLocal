@@ -39,7 +39,7 @@ class WellbeingRiskDashboard:
             self.conn = duckdb.connect(self.db_path, read_only=True)
 
             result = self.conn.execute(
-                "SELECT COUNT(*) as count FROM main_main_analytics.v_wellbeing_risk_profiles"
+                "SELECT COUNT(*) as count FROM main_analytics.v_wellbeing_risk_profiles"
             ).fetchall()
 
             count = result[0][0] if result else 0
@@ -57,7 +57,7 @@ class WellbeingRiskDashboard:
             # Get all wellbeing data
             query = """
                 SELECT *
-                FROM main_main_analytics.v_wellbeing_risk_profiles
+                FROM main_analytics.v_wellbeing_risk_profiles
                 LIMIT 100
             """
             data["wellbeing"] = pd.DataFrame(self.conn.execute(query).fetchall())
