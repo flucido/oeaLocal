@@ -3,7 +3,7 @@
 
 {{ config(
     materialized='table',
-    schema='main_analytics',
+    schema='main_main_analytics',
     tags=['analytics', 'hex', 'motherduck']
 ) }}
 

@@ -1,7 +1,5 @@
-# Equity Outcomes by Demographics Model
-# Reads from dbt-generated table in DuckDB
-
-type: model
+type: source
+connector: local_duckdb
 sql: |
   SELECT
     race_ethnicity,
@@ -15,4 +13,4 @@ sql: |
     pct_gpa_2_5_plus,
     pct_below_c,
     _loaded_at
-  FROM main_analytics.v_equity_outcomes_by_demographics
+  FROM main_main_analytics.v_equity_outcomes_by_demographics

@@ -1,6 +1,6 @@
 duckdb>=0.9.0
 dbt-duckdb>=1.6.0
-dlt[all]>=0.5.0
+dlt>=0.5.0
 pandas>=2.0.0
 pyarrow>=12.0.0
 numpy>=1.24.0
@@ -18,7 +18,16 @@ cryptography>=41.0.0
 passlib>=1.7.0
 
 [all]
-oss-framework[dev,jupyter]
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+ruff>=0.1.0
+mypy>=1.5.0
+pre-commit>=3.5.0
+jupyter>=1.0.0
+jupyterlab>=4.0.0
+ipywidgets>=8.0.0
 
 [dev]
 pytest>=7.4.0

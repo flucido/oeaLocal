@@ -237,11 +237,25 @@ SHOW TABLES;
 SELECT COUNT(*) FROM mart_core.dim_students;
 
 # Check attendance aggregations (example)
-SELECT * FROM mart_analytics.chronic_absenteeism_risk LIMIT 10;
+SELECT * FROM main_main_analytics.v_chronic_absenteeism_risk LIMIT 10;
 
 # Exit
 .quit
 ```
+
+### Run Contract Tests (Recommended)
+
+Validate dashboard/query contracts after pipeline updates:
+
+```bash
+# CI-equivalent contract validation
+python3 scripts/contracts/contract_tests.py
+
+# Detailed per-query logs
+scripts/contracts/run_query_audit_phase2.sh
+```
+
+See full usage docs in [scripts/contracts/README.md](../scripts/contracts/README.md).
 
 ### Check Parquet Files
 

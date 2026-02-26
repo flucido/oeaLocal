@@ -38,6 +38,108 @@ local-data-stack/
 
 ---
 
+## Rill Working Directory Requirements
+
+### Critical: Working Directory Matters
+
+Rill resolves **all file paths relative to the directory where `rill start` is executed**. This affects connector DSN paths, model imports, and dashboard references.
+
+### Canonical Rill Project Location
+
+The canonical Rill project is located at **`rill_project/`** (tracked in git):
+
+```
+local-data-stack/
+├── rill_project/              # ✅ Canonical Rill configuration
+│   ├── rill.yaml
+│   ├── connectors/
+│   ├── dashboards/
+│   ├── models/
+│   └── sources/
+└── archive/obsolete-rill-root/  # ❌ Obsolete (archived root files)
+```
+
+### Correct Usage
+
+**Always start Rill from the `rill_project/` directory:**
+
+```bash
+# From repository root
+cd rill_project/
+rill start
+# Opens http://localhost:9009
+```
+
+**Why this works:**
+- Connector DSN: `./oss_framework/data/oea.duckdb` resolves to `rill_project/../oss_framework/data/oea.duckdb`
+- Dashboard/model references resolve correctly
+- Rill caches build artifacts in `rill_project/.rill/`
+
+### Incorrect Usage (Will Fail)
+
+**❌ Starting from repository root:**
+
+```bash
+# From repository root
+rill start rill_project/
+```
+
+**Why this fails:**
+- Working directory is still repo root
+- Connector DSN `./oss_framework/data/oea.duckdb` resolves incorrectly
+- Rill cannot find DuckDB database
+- Dashboards may fail to load
+
+**❌ Starting from obsolete root Rill files:**
+
+```bash
+# From repository root
+rill start  # Uses archive/obsolete-rill-root/ files (outdated)
+```
+
+**Why this is wrong:**
+- Uses archived/obsolete configuration
+- Missing percentage/risk level fixes from `rill_project/`
+- Dashboard definitions may be inconsistent
+
+### CI/CD Implications
+
+When automating Rill in CI/CD pipelines, **always `cd` into `rill_project/` first:**
+
+```yaml
+# GitHub Actions example
+- name: Start Rill Developer
+  run: |
+    cd rill_project/
+    rill start --no-open
+```
+
+```dockerfile
+# Dockerfile example
+WORKDIR /app/rill_project
+CMD ["rill", "start", "--host", "0.0.0.0"]
+```
+
+### Troubleshooting
+
+**"DuckDB file not found" error:**
+
+1. Verify you're in `rill_project/` directory: `pwd`
+2. Check connector DSN path: `cat connectors/duckdb.yaml`
+3. Verify DuckDB exists: `ls -la ../oss_framework/data/oea.duckdb`
+
+**Dashboard changes not appearing:**
+
+1. Confirm you're editing files in `rill_project/dashboards/` (not `archive/obsolete-rill-root/`)
+2. Rill auto-reloads on save — check terminal for errors
+3. Hard refresh browser: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windows/Linux)
+
+**Build artifacts in wrong location:**
+
+- Rill creates `.rill/` directory in working directory where `rill start` was executed
+- If you see `.rill/` in repo root instead of `rill_project/.rill/`, you started from the wrong directory
+---
+
 ## Step 1: Create a SQL Model
 
 SQL models query DuckDB tables (typically from Stage 3 dbt output).
@@ -70,13 +172,13 @@ sql: |
     risk_level,
     intervention_recommendation,
     _loaded_at
-  FROM mart_analytics.v_chronic_absenteeism_risk
+  FROM main_main_analytics.v_chronic_absenteeism_risk
 ```
 
 **Key elements:**
 - `type: model` - Declares this as a Rill model
 - `sql: |` - Multi-line SQL query (YAML literal block)
-- `FROM mart_analytics.v_chronic_absenteeism_risk` - Queries dbt Stage 3 table
+- `FROM main_main_analytics.v_chronic_absenteeism_risk` - Queries current analytics mart table
 - `_loaded_at` - Timestamp column for time-series analysis
 
 ### Model File Naming
@@ -108,47 +210,47 @@ dimensions:
     label: "Student ID"
     column: student_key
     description: "Anonymized student identifier"
-  
+
   - name: grade_level
     label: "Grade Level"
     column: grade_level
     description: "Current grade level"
-  
+
   - name: school_id
     label: "School"
     column: school_id
     description: "School identifier"
-  
+
   - name: gender
     label: "Gender"
     column: gender
-  
+
   - name: race_ethnicity
     label: "Race/Ethnicity"
     column: race_ethnicity
-  
+
   - name: english_learner
     label: "English Learner"
     column: english_learner
-  
+
   - name: special_education
     label: "Special Education"
     column: special_education
-  
+
   - name: economically_disadvantaged
     label: "Economically Disadvantaged"
     column: economically_disadvantaged
-  
+
   - name: chronic_absence_flag
     label: "Chronic Absence Flag"
     column: chronic_absence_flag
     description: "1 if student has missed 10%+ of school days"
-  
+
   - name: risk_level
     label: "Risk Level"
     column: risk_level
-    description: "low, moderate, high"
-  
+    description: "Low, Medium, High, Critical"
+
   - name: attendance_trend_90d
     label: "90-Day Trend"
     column: attendance_trend_90d
@@ -159,30 +261,30 @@ measures:
     label: "Total Students"
     expression: COUNT(DISTINCT student_key)
     format_preset: humanize
-  
+
   - name: chronic_absence_count
     label: "Chronically Absent Students"
     expression: SUM(chronic_absence_flag)
     format_preset: humanize
-  
+
   - name: chronic_absence_rate
     label: "Chronic Absence Rate"
-    expression: SUM(chronic_absence_flag) * 100.0 / NULLIF(COUNT(DISTINCT student_key), 0)
+    expression: SUM(chronic_absence_flag) * 1.0 / NULLIF(COUNT(DISTINCT student_key), 0)
     format_preset: percentage
-  
+
   - name: avg_attendance_rate_30d
     label: "Avg 30-Day Attendance Rate"
-    expression: AVG(attendance_rate_30d)
+    expression: AVG(attendance_rate_30d) / 100.0
     format_preset: percentage
-  
+
   - name: avg_risk_score
     label: "Avg Risk Score"
     expression: AVG(composite_risk_score)
     format_preset: humanize
-  
+
   - name: high_risk_students
     label: "High Risk Students"
-    expression: SUM(CASE WHEN risk_level = 'high' THEN 1 ELSE 0 END)
+    expression: SUM(CASE WHEN risk_level = 'High' THEN 1 ELSE 0 END)
     format_preset: humanize
 
 # Default sorting
@@ -270,11 +372,11 @@ expression: SUM(days_absent)
 # Average a rate
 expression: AVG(attendance_rate)
 
-# Calculate percentage
-expression: SUM(chronic_absence_flag) * 100.0 / NULLIF(COUNT(DISTINCT student_key), 0)
+# Calculate percentage (fraction form for format_preset: percentage)
+expression: SUM(chronic_absence_flag) * 1.0 / NULLIF(COUNT(DISTINCT student_key), 0)
 
 # Conditional aggregation
-expression: SUM(CASE WHEN risk_level = 'high' THEN 1 ELSE 0 END)
+expression: SUM(CASE WHEN risk_level = 'High' THEN 1 ELSE 0 END)
 
 # Multiple conditions
 expression: SUM(CASE WHEN attendance_rate < 90 AND discipline_incidents > 0 THEN 1 ELSE 0 END)
@@ -289,7 +391,7 @@ Rill provides built-in format presets for measures:
 | Format Preset | Example Output | Use Case |
 |---------------|----------------|----------|
 | `humanize` | 1,234 | Counts, scores, raw numbers |
-| `percentage` | 85.3% | Rates, percentages (0-100 scale) |
+| `percentage` | 85.3% | Rates, percentages (0-1 fraction expression) |
 | `currency_usd` | $1,234.56 | Dollar amounts |
 | (none) | 1234.5678 | Raw values |
 
@@ -297,8 +399,8 @@ Rill provides built-in format presets for measures:
 ```yaml
 measures:
   - name: chronic_absence_rate
-    expression: SUM(chronic_absence_flag) * 100.0 / COUNT(DISTINCT student_key)
-    format_preset: percentage  # Displays as "15.3%" instead of "15.3"
+    expression: SUM(chronic_absence_flag) * 1.0 / COUNT(DISTINCT student_key)
+    format_preset: percentage  # Displays as "15.3%" when expression returns 0.153
 ```
 
 ---
@@ -354,7 +456,7 @@ sql: |
     chronic_absence_flag,
     risk_level,
     _loaded_at AS date
-  FROM mart_analytics.v_chronic_absenteeism_risk
+  FROM main_main_analytics.v_chronic_absenteeism_risk
 ```
 
 **Dashboard YAML** (`dashboards/chronic_absenteeism_risk.yaml`):
@@ -368,43 +470,43 @@ dimensions:
   - name: grade_level
     label: "Grade Level"
     column: grade_level
-  
+
   - name: school_id
     label: "School"
     column: school_id
-  
+
   - name: gender
     label: "Gender"
     column: gender
-  
+
   - name: race_ethnicity
     label: "Race/Ethnicity"
     column: race_ethnicity
-  
+
   - name: risk_level
     label: "Risk Level"
     column: risk_level
-    description: "low, moderate, high"
+    description: "Low, Medium, High, Critical"
 
 measures:
   - name: total_students
     label: "Total Students"
     expression: COUNT(DISTINCT student_key)
     format_preset: humanize
-  
+
   - name: chronic_absence_count
     label: "Chronically Absent"
     expression: SUM(chronic_absence_flag)
     format_preset: humanize
-  
+
   - name: chronic_absence_rate
     label: "Chronic Absence Rate"
-    expression: SUM(chronic_absence_flag) * 100.0 / NULLIF(COUNT(DISTINCT student_key), 0)
+    expression: SUM(chronic_absence_flag) * 1.0 / NULLIF(COUNT(DISTINCT student_key), 0)
     format_preset: percentage
-  
+
   - name: high_risk_students
     label: "High Risk Students"
-    expression: SUM(CASE WHEN risk_level = 'high' THEN 1 ELSE 0 END)
+    expression: SUM(CASE WHEN risk_level = 'High' THEN 1 ELSE 0 END)
     format_preset: humanize
 
 default_sort:
@@ -440,7 +542,7 @@ sql: |
     pct_gpa_2_5_plus,
     pct_below_c,
     _loaded_at
-  FROM mart_analytics.v_equity_outcomes_by_demographics
+  FROM main_main_analytics.v_equity_outcomes_by_demographics
 ```
 
 **Dashboard YAML** (`dashboards/equity_outcomes_by_demographics.yaml`):
@@ -454,15 +556,15 @@ dimensions:
   - name: race_ethnicity
     label: "Race/Ethnicity"
     column: race_ethnicity
-  
+
   - name: english_learner
     label: "English Learner"
     column: english_learner
-  
+
   - name: special_education
     label: "Special Education"
     column: special_education
-  
+
   - name: economically_disadvantaged
     label: "Economically Disadvantaged"
     column: economically_disadvantaged
@@ -472,30 +574,30 @@ measures:
     label: "Cohort Size"
     expression: SUM(cohort_size)
     format_preset: humanize
-  
+
   - name: avg_attendance
     label: "% Good Attendance (>90%)"
-    expression: AVG(pct_good_attendance)
+    expression: AVG(pct_good_attendance) / 100.0
     format_preset: percentage
-  
+
   - name: avg_no_discipline
     label: "% No Discipline Incidents"
-    expression: AVG(pct_no_discipline)
+    expression: AVG(pct_no_discipline) / 100.0
     format_preset: percentage
-  
+
   - name: avg_gpa
     label: "Average GPA"
     expression: AVG(avg_gpa)
     format_preset: humanize
-  
+
   - name: avg_gpa_above_2_5
     label: "% GPA 2.5+"
-    expression: AVG(pct_gpa_2_5_plus)
+    expression: AVG(pct_gpa_2_5_plus) / 100.0
     format_preset: percentage
-  
+
   - name: avg_below_c
     label: "% Below C Average"
-    expression: AVG(pct_below_c)
+    expression: AVG(pct_below_c) / 100.0
     format_preset: percentage
 
 default_sort:
@@ -516,20 +618,20 @@ default_sort:
 
 #### 1. Identify the Data Source
 
-Start with a dbt Stage 3 table (from `mart_analytics`, `mart_features`, or `mart_scoring`):
+Start with an analytics mart table (typically in `main_main_analytics`):
 
 ```bash
 # Connect to DuckDB and list available tables
 duckdb ./oss_framework/data/oea.duckdb
 
 # List tables in analytics schema
-SHOW TABLES IN mart_analytics;
+SHOW TABLES IN main_main_analytics;
 
 # Preview table structure
-DESCRIBE mart_analytics.your_table_name;
+DESCRIBE main_main_analytics.your_table_name;
 
 # Sample data
-SELECT * FROM mart_analytics.your_table_name LIMIT 10;
+SELECT * FROM main_main_analytics.your_table_name LIMIT 10;
 ```
 
 #### 2. Create SQL Model
@@ -544,15 +646,15 @@ sql: |
     student_key,
     grade_level,
     school_id,
-    
+
     -- Measure columns (numeric)
     gpa,
     attendance_rate,
     discipline_count,
-    
+
     -- Timestamp column (for time series)
     report_date
-  FROM mart_analytics.your_table_name
+  FROM main_main_analytics.your_table_name
   WHERE school_year = '2025-2026'  -- Optional filter
 ```
 
@@ -576,7 +678,7 @@ dimensions:
   - name: grade_level
     label: "Grade Level"
     column: grade_level
-  
+
   # Add more dimensions...
 
 measures:
@@ -584,12 +686,12 @@ measures:
     label: "Total Students"
     expression: COUNT(DISTINCT student_key)
     format_preset: humanize
-  
+
   - name: avg_gpa
     label: "Average GPA"
     expression: AVG(gpa)
     format_preset: humanize
-  
+
   # Add more measures...
 
 default_sort:
@@ -633,9 +735,9 @@ measures:
   - name: high_performers
     label: "High Performers (GPA ≥ 3.5, Attendance ≥ 95%)"
     expression: |
-      SUM(CASE 
-        WHEN gpa >= 3.5 AND attendance_rate >= 95 THEN 1 
-        ELSE 0 
+      SUM(CASE
+        WHEN gpa >= 3.5 AND attendance_rate >= 95 THEN 1
+        ELSE 0
       END)
     format_preset: humanize
 ```
@@ -694,7 +796,7 @@ dimensions:
    duckdb ./oss_framework/data/oea.duckdb
    ```
    ```sql
-   SELECT * FROM mart_analytics.your_table LIMIT 5;
+  SELECT * FROM main_main_analytics.your_table LIMIT 5;
    ```
 2. Verify column names match exactly (case-sensitive)
 3. Update dashboard YAML `column:` fields to match SQL output
@@ -708,7 +810,7 @@ dimensions:
 2. Update Rill SQL model to query Stage 3 (not Stage 2)
 3. Add indexes in DuckDB (if needed):
    ```sql
-   CREATE INDEX idx_student_key ON mart_analytics.your_table(student_key);
+  CREATE INDEX idx_student_key ON main_main_analytics.your_table(student_key);
    ```
 
 ### Time Series Not Working
@@ -718,15 +820,29 @@ dimensions:
 **Fix:**
 1. Verify column type in SQL model:
    ```sql
-   DESCRIBE mart_analytics.your_table;
+  DESCRIBE main_main_analytics.your_table;
    ```
 2. Cast to timestamp if needed:
    ```yaml
    sql: |
-     SELECT 
+     SELECT
        CAST(report_date AS TIMESTAMP) AS report_date,
        ...
    ```
+
+### Contract Validation Before Commit
+
+Run contract checks after changing Rill models/dashboards to catch schema and query drift early:
+
+```bash
+# CI-equivalent contract checks
+python3 scripts/contracts/contract_tests.py
+
+# Detailed per-query logs
+scripts/contracts/run_query_audit_phase2.sh
+```
+
+See: [scripts/contracts/README.md](../scripts/contracts/README.md)
 
 ---
 
@@ -769,19 +885,19 @@ init_sql: |
   -- Load Delta extension for reading Delta Lake tables
   INSTALL delta;
   LOAD delta;
-  
+
   -- Load httpfs for potential remote file access
   INSTALL httpfs;
   LOAD httpfs;
-  
+
   -- Load JSON extension
   INSTALL json;
   LOAD json;
-  
+
   -- Set memory limits (8GB for development)
   SET memory_limit='8GB';
   SET max_memory='8GB';
-  
+
   -- Configure for analytics workloads
   SET threads=4;
   SET default_null_order='nulls_last';
@@ -801,7 +917,7 @@ pool:
 **Bad** (queries unaggregated data):
 ```yaml
 sql: |
-  SELECT 
+  SELECT
     student_key,
     DATE_TRUNC('month', attendance_date) AS month,
     AVG(attendance_rate) AS avg_attendance
@@ -812,11 +928,11 @@ sql: |
 **Good** (queries pre-aggregated dbt model):
 ```yaml
 sql: |
-  SELECT 
+  SELECT
     student_key,
     month,
     avg_attendance
-  FROM mart_analytics.monthly_attendance_summary  -- Stage 3 (pre-aggregated)
+  FROM main_main_analytics.monthly_attendance_summary  -- Stage 3 (pre-aggregated)
 ```
 
 ### 2. Use Descriptive Labels
@@ -846,10 +962,10 @@ measures:
     label: "Cohort Size"
     expression: COUNT(DISTINCT student_key)
     format_preset: humanize
-  
+
   - name: chronic_absence_rate
     label: "Chronic Absence Rate"
-    expression: SUM(chronic_absence_flag) * 100.0 / NULLIF(COUNT(DISTINCT student_key), 0)
+    expression: SUM(chronic_absence_flag) * 1.0 / NULLIF(COUNT(DISTINCT student_key), 0)
     format_preset: percentage
 ```
 
@@ -882,7 +998,7 @@ SELECT
   student_key,
   grade_level,
   AVG(attendance_rate) AS avg_attendance
-FROM mart_analytics.chronic_absenteeism_risk
+FROM main_main_analytics.v_chronic_absenteeism_risk
 GROUP BY student_key, grade_level
 LIMIT 10;
 ```

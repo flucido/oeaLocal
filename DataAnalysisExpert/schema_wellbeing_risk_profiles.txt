@@ -1,0 +1,18 @@
+┌────────────────────────┬──────────────────────────┬─────────┬─────────┬─────────┬─────────┐
+│      column_name       │       column_type        │  null   │   key   │ default │  extra  │
+│        varchar         │         varchar          │ varchar │ varchar │ varchar │ varchar │
+├────────────────────────┼──────────────────────────┼─────────┼─────────┼─────────┼─────────┤
+│ student_key            │ VARCHAR                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ grade_level            │ INTEGER                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ school_id              │ VARCHAR                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ attendance_risk_score  │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ discipline_risk_score  │ DECIMAL(20,1)            │ YES     │ NULL    │ NULL    │ NULL    │
+│ academic_risk_score    │ INTEGER                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ high_risk_domain_count │ INTEGER                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ wellbeing_risk_score   │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ wellbeing_risk_level   │ VARCHAR                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ primary_concern        │ VARCHAR                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ _loaded_at             │ TIMESTAMP WITH TIME ZONE │ YES     │ NULL    │ NULL    │ NULL    │
+├────────────────────────┴──────────────────────────┴─────────┴─────────┴─────────┴─────────┤
+│ 11 rows                                                                         6 columns │
+└───────────────────────────────────────────────────────────────────────────────────────────┘

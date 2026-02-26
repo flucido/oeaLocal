@@ -1,0 +1,4 @@
+compiler: rillv1
+display_name: "Local Education Analytics (Marts)"
+description: "Dedicated Rill project for dbt mart schemas in oea.duckdb"
+olap_connector: local_duckdb

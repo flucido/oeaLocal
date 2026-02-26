@@ -8,11 +8,14 @@ description: "Student analytics dashboard powered by local DuckDB data mart"
 # DuckDB connector (defined in connectors/duckdb.yaml)
 olap_connector: duckdb
 
-# Optional: configure the development server
-server:
-  port: 9009
-  host: localhost
-
-# Optional: configure the AI features (disabled for local-only use)
-ai:
-  enabled: false
+ignore_paths:
+	- .git/
+	- .venv/
+	- local_data_stack.egg-info/
+	- oss_framework/dbt/dbt_packages/
+	- oss_framework/dbt/target/
+	- oss_framework/dbt/logs/
+	- oss_framework/tests/
+	- oss_framework/reports/
+	- archive/
+	- tmp/

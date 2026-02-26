@@ -1,0 +1,21 @@
+SELECT
+  student_key,
+  grade_level,
+  school_id,
+  gender,
+  race_ethnicity,
+  english_learner,
+  special_education,
+  economically_disadvantaged,
+  homeless_flag,
+  attendance_rate_30d,
+  unexcused_absence_rate_30d,
+  discipline_incidents_30d,
+  attendance_rate_90d,
+  attendance_trend_90d,
+  chronic_absence_flag,
+  composite_risk_score,
+  risk_level,
+  intervention_recommendation,
+  _loaded_at
+FROM main_main_analytics.v_chronic_absenteeism_risk

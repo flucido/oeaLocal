@@ -8,13 +8,26 @@ import duckdb
 import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html
+import os
+from pathlib import Path
+from typing import Optional
 
 class EquityOutcomesAnalysisDashboardDashboard:
-    def __init__(self, duckdb_path: str = "/Users/flucido/projects/openedDataEstate/oss_framework/data/oea.duckdb"):
-        self.db_path = duckdb_path
+    def __init__(self, duckdb_path: Optional[str] = None):
+        default_path = Path(__file__).resolve().parent / "oss_framework" / "data" / "oea.duckdb"
+        db_path = Path(duckdb_path or os.getenv("DUCKDB_DATABASE_PATH", str(default_path)))
+        
+        if not db_path.exists():
+            raise FileNotFoundError(
+                f"DuckDB database not found at {db_path}.\n"
+                f"Run the data pipeline first: python scripts/run_pipeline.py\n"
+                f"Or set DUCKDB_DATABASE_PATH environment variable."
+            )
+        
+        self.db_path = str(db_path)
         self.conn = None
         self.app = Dash(__name__)
-        
+
     def connect_database(self) -> bool:
         try:
             self.conn = duckdb.connect(self.db_path, read_only=True)
@@ -27,7 +40,7 @@ class EquityOutcomesAnalysisDashboardDashboard:
         except Exception as e:
             print(f"✗ Database connection failed: {e}")
             return False
-            
+
     def load_data(self) -> dict:
         try:
             data = {}
@@ -38,7 +51,7 @@ class EquityOutcomesAnalysisDashboardDashboard:
         except Exception as e:
             print(f"✗ Data loading failed: {e}")
             return {}
-            
+
     def build_layout(self, data: dict):
         self.app.layout = html.Div([
             html.Div([
@@ -49,7 +62,7 @@ class EquityOutcomesAnalysisDashboardDashboard:
                 html.P(f"Total records: {len(data.get('records', []))}")
             ], style={"padding": "20px"})
         ], style={"padding": "20px", "fontFamily": "Arial, sans-serif"})
-        
+
     def run(self, host: str = "0.0.0.0", port: int = 8052, debug: bool = False):
         if not self.connect_database():
             return False

@@ -1,0 +1,27 @@
+┌─────────────────────┬───────────────────────────────────┬────────────┐
+│    table_schema     │            table_name             │ table_type │
+│       varchar       │              varchar              │  varchar   │
+├─────────────────────┼───────────────────────────────────┼────────────┤
+│ main_main_analytics │ agg_attendance_windows            │ BASE TABLE │
+│ main_main_analytics │ agg_discipline_windows            │ BASE TABLE │
+│ main_main_analytics │ algebra_1_outcomes                │ BASE TABLE │
+│ main_main_analytics │ analytics_for_hex                 │ BASE TABLE │
+│ main_main_analytics │ apex_math_8_enrollment_by_year    │ BASE TABLE │
+│ main_main_analytics │ equity_by_race                    │ BASE TABLE │
+│ main_main_analytics │ fact_academic_performance         │ BASE TABLE │
+│ main_main_analytics │ fact_class_effectiveness          │ BASE TABLE │
+│ main_main_analytics │ lead_enrollment_by_year           │ BASE TABLE │
+│ main_main_analytics │ lead_program_enrollment           │ BASE TABLE │
+│ main_main_analytics │ math_8_cohort_tracking            │ BASE TABLE │
+│ main_main_analytics │ math_8_enrollment_by_year         │ BASE TABLE │
+│ main_main_analytics │ math_pathways_7th_grade           │ BASE TABLE │
+│ main_main_analytics │ school_summary                    │ BASE TABLE │
+│ main_main_analytics │ v_cde_school_benchmarks           │ BASE TABLE │
+│ main_main_analytics │ v_chronic_absenteeism_risk        │ BASE TABLE │
+│ main_main_analytics │ v_class_section_comparison        │ BASE TABLE │
+│ main_main_analytics │ v_equity_outcomes_by_demographics │ BASE TABLE │
+│ main_main_analytics │ v_performance_correlations        │ BASE TABLE │
+│ main_main_analytics │ v_wellbeing_risk_profiles         │ BASE TABLE │
+├─────────────────────┴───────────────────────────────────┴────────────┤
+│ 20 rows                                                    3 columns │
+└──────────────────────────────────────────────────────────────────────┘

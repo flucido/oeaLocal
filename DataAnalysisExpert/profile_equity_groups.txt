@@ -1,0 +1,18 @@
+┌────────────────┬─────────────────┬───────────────────┬────────────────────────────┬─────────────┐
+│ race_ethnicity │ english_learner │ special_education │ economically_disadvantaged │ cohort_size │
+│    varchar     │     boolean     │      boolean      │          boolean           │    int64    │
+├────────────────┼─────────────────┼───────────────────┼────────────────────────────┼─────────────┤
+│ Asian          │ false           │ false             │ false                      │         255 │
+│ Black          │ false           │ false             │ false                      │         255 │
+│ Other          │ false           │ false             │ false                      │         255 │
+│ White          │ false           │ false             │ false                      │         255 │
+│ Hispanic       │ false           │ false             │ false                      │         170 │
+│ Asian          │ false           │ false             │ true                       │          85 │
+│ Black          │ false           │ false             │ true                       │          85 │
+│ Hispanic       │ true            │ false             │ false                      │          85 │
+│ Hispanic       │ true            │ true              │ true                       │          85 │
+│ Other          │ false           │ false             │ true                       │          85 │
+│ White          │ false           │ false             │ true                       │          85 │
+├────────────────┴─────────────────┴───────────────────┴────────────────────────────┴─────────────┤
+│ 11 rows                                                                               5 columns │
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘

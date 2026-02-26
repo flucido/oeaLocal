@@ -1,0 +1,18 @@
+┌────────────────────────────┬──────────────────────────┬─────────┬─────────┬─────────┬─────────┐
+│        column_name         │       column_type        │  null   │   key   │ default │  extra  │
+│          varchar           │         varchar          │ varchar │ varchar │ varchar │ varchar │
+├────────────────────────────┼──────────────────────────┼─────────┼─────────┼─────────┼─────────┤
+│ race_ethnicity             │ VARCHAR                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ english_learner            │ BOOLEAN                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ special_education          │ BOOLEAN                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ economically_disadvantaged │ BOOLEAN                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ cohort_size                │ BIGINT                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ pct_good_attendance        │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ pct_no_discipline          │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ avg_gpa                    │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ pct_gpa_2_5_plus           │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ pct_below_c                │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ _loaded_at                 │ TIMESTAMP WITH TIME ZONE │ YES     │ NULL    │ NULL    │ NULL    │
+├────────────────────────────┴──────────────────────────┴─────────┴─────────┴─────────┴─────────┤
+│ 11 rows                                                                             6 columns │
+└───────────────────────────────────────────────────────────────────────────────────────────────┘

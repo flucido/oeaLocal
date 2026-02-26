@@ -104,7 +104,7 @@ DELETE FROM raw_attendance WHERE student_id = 'hashed_student_id';
 
 ```python
 # Delete records older than 7 years (FERPA requirement)
-DELETE FROM raw_students 
+DELETE FROM raw_students
 WHERE withdrawal_date < CURRENT_DATE - INTERVAL 7 YEARS;
 ```
 
@@ -193,12 +193,12 @@ model: chronic_absenteeism_risk
 ```sql
 -- Example: Create restricted view for educators
 CREATE VIEW educator_dashboard AS
-SELECT 
+SELECT
     school_id,
     grade_level,
-    attendance_rate,
+  attendance_rate_30d,
     -- NO student-level PII
-FROM mart_analytics.chronic_absenteeism_risk
+FROM main_main_analytics.v_chronic_absenteeism_risk
 WHERE school_id IN (SELECT school_id FROM user_access WHERE user_id = current_user());
 ```
 
@@ -525,7 +525,7 @@ grep ERROR oss_framework/logs/oea.log | tail -20
 
 ```sql
 -- Check table sizes
-SELECT 
+SELECT
     table_name,
     COUNT(*) as row_count,
     pg_size_pretty(pg_total_relation_size(table_name)) as total_size

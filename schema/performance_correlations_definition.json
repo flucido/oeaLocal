@@ -23,7 +23,7 @@
             5
           ],
           "title": "Key Performance Correlations",
-          "query": "SELECT \n                                correlation_name as \"Correlation\",\n                                ROUND(correlation_coefficient, 3) as \"Strength\",\n                                p_value as \"P-Value\",\n                                CASE WHEN p_value < 0.05 THEN 'Yes' ELSE 'No' END as \"Significant\"\n                            FROM main_main_analytics.v_performance_correlations\n                            ORDER BY ABS(correlation_coefficient) DESC",
+          "query": "SELECT \n                                correlation_pair as \"Correlation\",\n                                ROUND(correlation_coefficient, 3) as \"Strength\",\n                                data_points as \"Data Points\",\n                                expected_direction as \"Expected Direction\",\n                                strength as \"Band\"\n                            FROM main_main_analytics.v_performance_correlations\n                            ORDER BY ABS(correlation_coefficient) DESC",
           "visualization_type": "table",
           "settings": {}
         }
@@ -42,7 +42,7 @@
             4
           ],
           "title": "Intervention Status",
-          "query": "SELECT \n                                intervention_status as \"Status\",\n                                COUNT(*) as \"Students\"\n                            FROM main_main_analytics.v_performance_correlations\n                            WHERE intervention_status IS NOT NULL\n                            GROUP BY intervention_status\n                            ORDER BY \"Students\" DESC",
+          "query": "SELECT \n                                strength as \"Status\",\n                                COUNT(*) as \"Correlations\"\n                            FROM main_main_analytics.v_performance_correlations\n                            WHERE strength IS NOT NULL\n                            GROUP BY strength\n                            ORDER BY \"Correlations\" DESC",
           "visualization_type": "pie",
           "settings": {}
         },
@@ -55,8 +55,8 @@
             6,
             4
           ],
-          "title": "Intervention Completion Rate (%)",
-          "query": "SELECT \n                                intervention_type as \"Type\",\n                                ROUND(SUM(CASE WHEN intervention_status = 'Completed' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 1) as \"Completion %\"\n                            FROM main_main_analytics.v_performance_correlations\n                            WHERE intervention_type IS NOT NULL\n                            GROUP BY intervention_type\n                            ORDER BY \"Completion %\" DESC",
+          "title": "Average Absolute Correlation (%)",
+          "query": "SELECT \n                                expected_direction as \"Type\",\n                                ROUND(AVG(ABS(correlation_coefficient)) * 100.0, 1) as \"Completion %\"\n                            FROM main_main_analytics.v_performance_correlations\n                            WHERE expected_direction IS NOT NULL\n                            GROUP BY expected_direction\n                            ORDER BY \"Completion %\" DESC",
           "visualization_type": "bar",
           "settings": {}
         }
@@ -74,8 +74,8 @@
             12,
             4
           ],
-          "title": "Intervention ROI by Type",
-          "query": "SELECT \n                                intervention_type as \"Intervention Type\",\n                                COUNT(*) as \"Students Served\",\n                                ROUND(AVG(student_outcome_improvement), 2) as \"Avg Outcome Improvement\",\n                                ROUND(SUM(CASE WHEN student_outcome_improvement > 0 THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 1) as \"Success Rate %\"\n                            FROM main_main_analytics.v_performance_correlations\n                            WHERE intervention_type IS NOT NULL AND intervention_status = 'Completed'\n                            GROUP BY intervention_type\n                            ORDER BY \"Avg Outcome Improvement\" DESC",
+          "title": "Correlation Effect by Direction",
+          "query": "SELECT \n                                expected_direction as \"Intervention Type\",\n                                COUNT(*) as \"Students Served\",\n                                ROUND(AVG(correlation_coefficient), 3) as \"Avg Outcome Improvement\",\n                                ROUND(AVG(ABS(correlation_coefficient)) * 100.0, 1) as \"Success Rate %\"\n                            FROM main_main_analytics.v_performance_correlations\n                            WHERE expected_direction IS NOT NULL\n                            GROUP BY expected_direction\n                            ORDER BY \"Avg Outcome Improvement\" DESC",
           "visualization_type": "table",
           "settings": {}
         }

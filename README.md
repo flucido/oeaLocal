@@ -19,16 +19,18 @@
 
 ```text
 local-data-stack/
--- oss_framework/               # Core pipelines and transformations
--- src/                         # Database connection utilities
--- rill.yaml                    # Rill project configuration
--- connectors/                  # Rill connector configs
--- models/                      # Rill SQL models
--- metrics/                     # Rill dashboard definitions
--- scripts/                     # Orchestration scripts
--- data/                        # Local data storage (stage1, stage2, stage3)
--- README.md                    # Project overview (this file)
-
+├── oss_framework/               # Core pipelines and transformations
+├── src/                         # Database connection utilities
+├── rill_project/                # Rill dashboards (canonical location)
+│   ├── rill.yaml
+│   ├── connectors/              # DuckDB connector config
+│   ├── dashboards/              # Dashboard definitions
+│   ├── models/                  # SQL models
+│   └── sources/                 # Data source configs
+├── scripts/                     # Orchestration scripts
+├── data/                        # Local data storage (gitignored)
+└── README.md                    # Project overview (this file)
+```
 ## Quick start
 
 ### 1) Clone the repository
@@ -64,6 +66,14 @@ python scripts/run_pipeline.py
 
 ### 6) Start Rill Developer
 
+**Important:** Always start Rill from the `rill_project/` directory:
+
+```bash
+cd rill_project/
+rill start
+# Opens http://localhost:9009
+```
+
 ```bash
 rill start
 # Opens http://localhost:9009
@@ -74,6 +84,7 @@ rill start
 - **Setup guide:** [docs/SETUP.md](docs/SETUP.md)
 - **Architecture:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - **Rill guide:** [docs/RILL_GUIDE.md](docs/RILL_GUIDE.md)
+- **Contract tests:** [scripts/contracts/README.md](scripts/contracts/README.md)
 
 ## Forked from openedDataEstate
 

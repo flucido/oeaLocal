@@ -12,7 +12,7 @@ Comprehensive operational procedures for managing the local-data-stack analytics
 
 ### 1.1 Rill Dashboard Not Loading
 
-**Severity**: High  
+**Severity**: High
 **SLA**: 1 hour resolution
 
 **Diagnosis**:
@@ -58,7 +58,7 @@ lsof -i :9009
 
 ### 1.2 Data Quality Issues
 
-**Severity**: Medium  
+**Severity**: Medium
 **SLA**: 4 hours resolution
 
 **Detection**:
@@ -110,7 +110,7 @@ conn.close()
 
 ### 1.3 High Query Latency
 
-**Severity**: Medium  
+**Severity**: Medium
 **SLA**: 2 hours resolution
 
 **Detection**:
@@ -162,7 +162,7 @@ docker-compose logs rill | grep -i "query" | tail -20
 
 ### 1.4 dbt Refresh Failure
 
-**Severity**: High  
+**Severity**: High
 **SLA**: 2 hours resolution
 
 **Detection**:
@@ -220,7 +220,7 @@ ERROR: Test assertion failed
 
 ### 2.1 Database Backup Verification
 
-**Frequency**: Daily (automated), Manual weekly verification  
+**Frequency**: Daily (automated), Manual weekly verification
 **Duration**: 15 minutes
 
 ```bash
@@ -264,7 +264,7 @@ echo "=== Verification Complete ==="
 
 ### 2.2 Docker Stack Health Check
 
-**Frequency**: 4x daily  
+**Frequency**: 4x daily
 **Duration**: 10 minutes
 
 ```bash
@@ -312,8 +312,8 @@ echo "=== Health Check Complete ==="
 
 ### 2.3 Monthly Maintenance Window
 
-**Frequency**: Last Sunday each month, 2 AM local time  
-**Duration**: 1-2 hours  
+**Frequency**: Last Sunday each month, 2 AM local time
+**Duration**: 1-2 hours
 **Downtime**: ~30 minutes (planned)
 
 **Procedure**:
@@ -464,7 +464,7 @@ docker-compose exec jupyter python3 -c "
 import duckdb
 conn = duckdb.connect('/home/jovyan/data/oea.duckdb')
 
-tables = ['mart_core.dim_students', 'mart_core.fact_attendance', 'mart_analytics.chronic_absenteeism_risk']
+tables = ['mart_core.dim_students', 'mart_core.fact_attendance', 'main_main_analytics.v_chronic_absenteeism_risk']
 for table in tables:
     count = conn.execute(f'SELECT COUNT(*) FROM {table}').fetchone()[0]
     print(f'{table}: {count:,} records')
@@ -478,7 +478,7 @@ import duckdb
 conn = duckdb.connect('/home/jovyan/data/oea.duckdb')
 result = conn.execute('''
     SELECT COUNT(*) as null_key_columns
-    FROM mart_analytics.chronic_absenteeism_risk
+  FROM main_main_analytics.v_chronic_absenteeism_risk
     WHERE student_key IS NULL OR school_id IS NULL
 ''').fetchone()[0]
 print(f'Null key columns: {result}')
@@ -490,10 +490,10 @@ docker-compose exec jupyter python3 -c "
 import duckdb
 conn = duckdb.connect('/home/jovyan/data/oea.duckdb')
 result = conn.execute('''
-    SELECT 
+    SELECT
         FLOOR(chronic_absenteeism_risk_score / 10) * 10 as score_range,
         COUNT(*) as count
-    FROM mart_analytics.chronic_absenteeism_risk
+  FROM main_main_analytics.v_chronic_absenteeism_risk
     GROUP BY FLOOR(chronic_absenteeism_risk_score / 10) * 10
     ORDER BY score_range
 ''').fetchall()

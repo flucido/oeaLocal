@@ -9,14 +9,27 @@ import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html
 from datetime import datetime
+import os
+from pathlib import Path
+from typing import Optional
 
 
 class WellbeingRiskDashboard:
     def __init__(
         self,
-        duckdb_path: str = "/Users/flucido/projects/openedDataEstate/oss_framework/data/oea.duckdb",
+        duckdb_path: Optional[str] = None,
     ):
-        self.db_path = duckdb_path
+        default_path = Path(__file__).resolve().parent / "oss_framework" / "data" / "oea.duckdb"
+        db_path = Path(duckdb_path or os.getenv("DUCKDB_DATABASE_PATH", str(default_path)))
+        
+        if not db_path.exists():
+            raise FileNotFoundError(
+                f"DuckDB database not found at {db_path}.\n"
+                f"Run the data pipeline first: python scripts/run_pipeline.py\n"
+                f"Or set DUCKDB_DATABASE_PATH environment variable."
+            )
+        
+        self.db_path = str(db_path)
         self.conn = None
         self.app = Dash(__name__)
 

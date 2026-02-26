@@ -200,10 +200,10 @@ models:
 5. Create pseudonymized views for external sharing
 
 **Key transformations:**
-- **Feature engineering**: 
+- **Feature engineering**:
   ```sql
   -- GPA trend calculation
-  SELECT 
+  SELECT
     student_id,
     current_term_gpa,
     LAG(current_term_gpa) OVER (PARTITION BY student_id ORDER BY term) AS prior_term_gpa,
@@ -213,7 +213,7 @@ models:
 - **Risk scoring**:
   ```sql
   -- Chronic absenteeism flag
-  SELECT 
+  SELECT
     student_id,
     COUNT(*) AS total_days,
     SUM(CASE WHEN absent THEN 1 ELSE 0 END) AS absent_days,
@@ -225,13 +225,13 @@ models:
 - **Pre-aggregation**:
   ```sql
   -- Monthly attendance summary (for fast dashboard loading)
-  SELECT 
+  SELECT
     DATE_TRUNC('month', attendance_date) AS month,
     school_id,
     grade_level,
     COUNT(DISTINCT student_id) AS total_students,
     AVG(absence_rate) AS avg_absence_rate
-  FROM mart_analytics.chronic_absenteeism_risk
+  FROM main_main_analytics.v_chronic_absenteeism_risk
   GROUP BY month, school_id, grade_level
   ```
 
@@ -239,8 +239,8 @@ models:
 - `mart_features.student_features` - Engineered student-level features
 - `mart_scoring.chronic_absenteeism_risk` - Attendance risk scores
 - `mart_scoring.dropout_risk` - Dropout prediction scores
-- `mart_analytics.monthly_attendance_summary` - Pre-aggregated metrics
-- `mart_analytics.equity_outcomes_by_demographics` - Demographic performance gaps
+- `main_main_analytics.v_chronic_absenteeism_risk` - Chronic absenteeism metrics
+- `main_main_analytics.v_equity_outcomes_by_demographics` - Demographic performance gaps
 - `mart_privacy.pseudonymized_students` - De-identified views
 
 **dbt configuration:**
@@ -261,6 +261,72 @@ models:
       +schema: 'mart_analytics'
       +post-hook: "ANALYZE {{ this }}"  # Optimize query performance
 ```
+
+---
+
+## DuckDB Schema Naming Convention
+
+### Schema Prefixing Behavior
+
+dbt automatically prefixes schema names with the **profile name** and **target name** from `profiles.yml`. This is standard dbt behavior for namespace isolation.
+
+**Configuration:**
+```yaml
+# profiles.yml
+duckdb_oss:        # Profile name
+  target: 'dev'     # Target name (or 'prod')
+```
+
+**dbt Model Configuration:**
+```yaml
+# dbt_project.yml
+models:
+  local_data_stack:
+    mart_analytics:
+      +schema: 'mart_analytics'  # Configured schema name
+```
+
+**Resulting DuckDB Schema:**
+```
+{profile}_{target}_{configured_schema}
+main_dev_mart_analytics  (when target: dev)
+main_prod_mart_analytics (when target: prod)
+```
+
+### Current Schema Mapping
+
+| dbt Config (`schema=`) | DuckDB Schema (Actual) | Usage |
+|------------------------|------------------------|-------|
+| `'mart_core'` | `main_dev_core` | Dimensions, facts |
+| `'mart_features'` | `main_dev_features` | Engineered features |
+| `'mart_scoring'` | `main_dev_scoring` | Risk scores |
+| `'mart_analytics'` | `main_dev_mart_analytics` | Pre-aggregated metrics for dashboards |
+| `'mart_privacy'` | `main_dev_privacy` | Pseudonymized views |
+
+**Note:** All SQL queries (Rill dashboards, Python scripts, contract tests) must reference the **full DuckDB schema name** (e.g., `main_dev_mart_analytics`), not the dbt configured name.
+
+### Why This Matters
+
+1. **Dashboard SQL models** query DuckDB directly → must use `main_dev_mart_analytics`
+2. **Python analytics scripts** connect to DuckDB → must use `main_dev_mart_analytics`
+3. **Contract tests** validate schema → must use `main_dev_mart_analytics`
+4. **dbt model configs** reference logical name → use `schema='mart_analytics'`
+
+**Example:**
+```sql
+-- ❌ WRONG: Rill SQL model using dbt logical name
+SELECT * FROM mart_analytics.v_chronic_absenteeism_risk
+
+-- ✅ CORRECT: Rill SQL model using actual DuckDB schema
+SELECT * FROM main_dev_mart_analytics.v_chronic_absenteeism_risk
+```
+
+### Production Environment
+
+When deploying to production with `target: prod`, schema names change:
+- `main_dev_mart_analytics` → `main_prod_mart_analytics`
+- Update all dashboard SQL, Python scripts, and contract tests accordingly
+- Or use environment variables to dynamically construct schema names
 
 ---
 
@@ -385,15 +451,15 @@ class PipelineOrchestrator:
     def stage1_ingestion(self):
         # Run dlt pipelines
         run("python oss_framework/pipelines/aeries_dlt_pipeline.py")
-    
+
     def stage2_refinement(self):
         # Run dbt staging models
         run("dbt run --select tag:staging", workdir=dbt_dir)
-    
+
     def stage3_analytics(self):
         # Run dbt analytics models
         run("dbt run --select mart_core mart_features mart_analytics", workdir=dbt_dir)
-    
+
     def run_full_pipeline(self):
         # Execute all stages sequentially
         self.stage1_ingestion()
@@ -504,12 +570,12 @@ See [SECURITY.md](../SECURITY.md) for detailed security guidance.
    ```python
    # new_source_dlt_pipeline.py
    import dlt
-   
+
    @dlt.resource
    def new_data_source():
        # Extract logic
        yield data_batch
-   
+
    pipeline = dlt.pipeline(destination='filesystem')
    pipeline.run(new_data_source())
    ```

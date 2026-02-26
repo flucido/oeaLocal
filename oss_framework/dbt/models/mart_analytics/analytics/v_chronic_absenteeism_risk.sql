@@ -1,6 +1,6 @@
 {{ config(
     materialized='table',
-    schema='main_analytics',
+    schema='main_main_analytics',
     post_hook="ANALYZE {{ this }}"
 ) }}
 

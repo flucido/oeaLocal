@@ -10,14 +10,27 @@ import plotly.graph_objects as go
 import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
 from datetime import datetime
+import os
+from pathlib import Path
+from typing import Optional
 
 
 class ChronicAbsenteeismDashboard:
     def __init__(
         self,
-        duckdb_path: str = "/Users/flucido/projects/openedDataEstate/oss_framework/data/oea.duckdb",
+        duckdb_path: Optional[str] = None,
     ):
-        self.db_path = duckdb_path
+        default_path = Path(__file__).resolve().parent / "oss_framework" / "data" / "oea.duckdb"
+        db_path = Path(duckdb_path or os.getenv("DUCKDB_DATABASE_PATH", str(default_path)))
+        
+        if not db_path.exists():
+            raise FileNotFoundError(
+                f"DuckDB database not found at {db_path}.\n"
+                f"Run the data pipeline first: python scripts/run_pipeline.py\n"
+                f"Or set DUCKDB_DATABASE_PATH environment variable."
+            )
+        
+        self.db_path = str(db_path)
         self.conn = None
         self.app = Dash(__name__)
 
@@ -53,10 +66,10 @@ class ChronicAbsenteeismDashboard:
 
             # 2. Chronic absence rate
             query = """
-                SELECT 
+                SELECT
                     ROUND(
-                        COUNT(CASE WHEN risk_level != 'Low' THEN 1 END) * 100.0 / 
-                        COUNT(DISTINCT student_key), 
+                        COUNT(CASE WHEN risk_level != 'Low' THEN 1 END) * 100.0 /
+                        COUNT(DISTINCT student_key),
                         1
                     ) as rate
                 FROM main_main_analytics.v_chronic_absenteeism_risk
@@ -84,7 +97,7 @@ class ChronicAbsenteeismDashboard:
 
             # 5. Top at-risk students
             query = """
-                SELECT 
+                SELECT
                     student_key as student_id,
                     risk_level,
                     ROUND(attendance_rate_30d, 1) as absence_rate,
@@ -108,7 +121,7 @@ class ChronicAbsenteeismDashboard:
 
             # 6. Attendance trends by grade
             query = """
-                SELECT 
+                SELECT
                     grade_level as grade,
                     COUNT(DISTINCT student_key) as total_students,
                     COUNT(CASE WHEN risk_level = 'High' THEN 1 END) as high_count,

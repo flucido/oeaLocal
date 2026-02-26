@@ -1,0 +1,13 @@
+SELECT
+  race_ethnicity,
+  english_learner,
+  special_education,
+  economically_disadvantaged,
+  cohort_size,
+  pct_good_attendance,
+  pct_no_discipline,
+  avg_gpa,
+  pct_gpa_2_5_plus,
+  pct_below_c,
+  _loaded_at
+FROM main_main_analytics.v_equity_outcomes_by_demographics

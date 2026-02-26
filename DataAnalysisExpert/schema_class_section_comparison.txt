@@ -1,0 +1,24 @@
+┌────────────────────────────┬──────────────────────────┬─────────┬─────────┬─────────┬─────────┐
+│        column_name         │       column_type        │  null   │   key   │ default │  extra  │
+│          varchar           │         varchar          │ varchar │ varchar │ varchar │ varchar │
+├────────────────────────────┼──────────────────────────┼─────────┼─────────┼─────────┼─────────┤
+│ course_id                  │ VARCHAR                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ school_id                  │ VARCHAR                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ grade_level                │ INTEGER                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ enrollment_count           │ BIGINT                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ avg_grade_numeric          │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ pct_passed                 │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ pct_a_b_grades             │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ course_avg_grade           │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ grade_diff_from_course_avg │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ pct_passed_ell             │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ pct_passed_sped            │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ pct_passed_frl             │ DOUBLE                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ pass_rate_rank             │ BIGINT                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ grade_rank                 │ BIGINT                   │ YES     │ NULL    │ NULL    │ NULL    │
+│ effectiveness_rating       │ VARCHAR                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ term                       │ VARCHAR                  │ YES     │ NULL    │ NULL    │ NULL    │
+│ _loaded_at                 │ TIMESTAMP WITH TIME ZONE │ YES     │ NULL    │ NULL    │ NULL    │
+├────────────────────────────┴──────────────────────────┴─────────┴─────────┴─────────┴─────────┤
+│ 17 rows                                                                             6 columns │
+└───────────────────────────────────────────────────────────────────────────────────────────────┘

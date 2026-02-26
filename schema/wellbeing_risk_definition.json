@@ -8,7 +8,7 @@
   ],
   "refresh_interval_minutes": 5,
   "row_level_security": true,
-  "rbac_column": "assigned_counselor_id",
+  "rbac_column": "school_id",
   "tabs": [
     {
       "name": "Risk Dashboard",
@@ -23,7 +23,7 @@
             2
           ],
           "title": "High Risk Count",
-          "query": "SELECT COUNT(*) as count\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            WHERE overall_risk_level = 'High'",
+          "query": "SELECT COUNT(*) as count\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            WHERE wellbeing_risk_level = 'High'",
           "visualization_type": "number",
           "settings": {
             "color": "#E53935"
@@ -39,7 +39,7 @@
             2
           ],
           "title": "Medium Risk Count",
-          "query": "SELECT COUNT(*) as count\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            WHERE overall_risk_level = 'Medium'",
+          "query": "SELECT COUNT(*) as count\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            WHERE wellbeing_risk_level = 'Medium'",
           "visualization_type": "number",
           "settings": {
             "color": "#FB8C00"
@@ -54,8 +54,8 @@
             3,
             2
           ],
-          "title": "Active Cases",
-          "query": "SELECT COUNT(*) as count\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            WHERE has_active_case_plan = true",
+          "title": "Multi-Domain Risk Cases",
+          "query": "SELECT COUNT(*) as count\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            WHERE high_risk_domain_count >= 2",
           "visualization_type": "number",
           "settings": {
             "color": "#2E7D32"
@@ -70,8 +70,8 @@
             3,
             2
           ],
-          "title": "Follow-ups Due",
-          "query": "SELECT COUNT(*) as count\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            WHERE days_since_last_contact > 14 AND has_active_case_plan = true",
+          "title": "Severe Risk Cases",
+          "query": "SELECT COUNT(*) as count\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            WHERE wellbeing_risk_score >= 70",
           "visualization_type": "number",
           "settings": {
             "color": "#1565C0"
@@ -87,7 +87,7 @@
             4
           ],
           "title": "Risk Domain Breakdown",
-          "query": "SELECT \n                                'Academic' as domain,\n                                SUM(CASE WHEN academic_risk_flag = true THEN 1 ELSE 0 END) as count\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            UNION ALL\n                            SELECT 'Behavioral', SUM(CASE WHEN behavioral_risk_flag = true THEN 1 ELSE 0 END)\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            UNION ALL\n                            SELECT 'Social-Emotional', SUM(CASE WHEN social_emotional_risk_flag = true THEN 1 ELSE 0 END)\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            UNION ALL\n                            SELECT 'Family Engagement', SUM(CASE WHEN family_engagement_risk_flag = true THEN 1 ELSE 0 END)\n                            FROM main_main_analytics.v_wellbeing_risk_profiles",
+          "query": "SELECT \n                                'Academic' as domain,\n                                SUM(CASE WHEN academic_risk_score >= 70 THEN 1 ELSE 0 END) as count\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            UNION ALL\n                            SELECT 'Behavioral', SUM(CASE WHEN discipline_risk_score >= 70 THEN 1 ELSE 0 END)\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            UNION ALL\n                            SELECT 'Attendance', SUM(CASE WHEN attendance_risk_score >= 70 THEN 1 ELSE 0 END)\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            UNION ALL\n                            SELECT 'Multi-Domain', SUM(CASE WHEN high_risk_domain_count >= 2 THEN 1 ELSE 0 END)\n                            FROM main_main_analytics.v_wellbeing_risk_profiles",
           "visualization_type": "bar",
           "settings": {}
         },
@@ -101,7 +101,7 @@
             4
           ],
           "title": "My Caseload (by assigned counselor)",
-          "query": "SELECT \n                                overall_risk_level as \"Risk Level\",\n                                COUNT(*) as \"Student Count\"\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            GROUP BY overall_risk_level\n                            ORDER BY overall_risk_level",
+          "query": "SELECT \n                                wellbeing_risk_level as \"Risk Level\",\n                                COUNT(*) as \"Student Count\"\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            GROUP BY wellbeing_risk_level\n                            ORDER BY wellbeing_risk_level",
           "visualization_type": "pie",
           "settings": {}
         }
@@ -119,8 +119,8 @@
             12,
             5
           ],
-          "title": "Resource Allocation by Risk Level",
-          "query": "SELECT \n                                overall_risk_level as \"Risk Level\",\n                                COUNT(*) as \"Students\",\n                                ROUND(AVG(CASE WHEN has_counseling_services = true THEN 100 ELSE 0 END), 1) as \"Counseling %\",\n                                ROUND(AVG(CASE WHEN has_academic_support = true THEN 100 ELSE 0 END), 1) as \"Academic Support %\",\n                                ROUND(AVG(CASE WHEN has_case_plan = true THEN 100 ELSE 0 END), 1) as \"Case Plan %\"\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            GROUP BY overall_risk_level\n                            ORDER BY overall_risk_level DESC",
+          "title": "Average Risk Scores by Risk Level",
+          "query": "SELECT \n                                wellbeing_risk_level as \"Risk Level\",\n                                COUNT(*) as \"Students\",\n                                ROUND(AVG(attendance_risk_score), 1) as \"Attendance Risk\",\n                                ROUND(AVG(discipline_risk_score), 1) as \"Discipline Risk\",\n                                ROUND(AVG(academic_risk_score), 1) as \"Academic Risk\"\n                            FROM main_main_analytics.v_wellbeing_risk_profiles\n                            GROUP BY wellbeing_risk_level\n                            ORDER BY wellbeing_risk_level DESC",
           "visualization_type": "table",
           "settings": {}
         }

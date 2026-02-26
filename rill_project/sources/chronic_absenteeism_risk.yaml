@@ -1,7 +1,5 @@
-# Chronic Absenteeism Risk Model
-# Reads from dbt-generated table in DuckDB
-
-type: model
+type: source
+connector: local_duckdb
 sql: |
   SELECT
     student_key,
@@ -23,4 +21,4 @@ sql: |
     risk_level,
     intervention_recommendation,
     _loaded_at
-  FROM main_analytics.v_chronic_absenteeism_risk
+  FROM main_main_analytics.v_chronic_absenteeism_risk

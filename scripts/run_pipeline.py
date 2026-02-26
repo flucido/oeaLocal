@@ -150,12 +150,28 @@ class PipelineOrchestrator:
         """
         self.log("=== STAGE 3: ANALYTICS MARTS ===")
 
-        # Run core marts first
+        # Seed required mapping tables first
         success = self.run_command(
-            "dbt run --select mart_core",
-            "dbt core dimension/fact tables",
+            "dbt seed --select school_cds_mapping_seed",
+            "dbt seed school mapping table",
             workdir=self.dbt_project_dir,
         )
+
+        # Build privacy layer required by core marts
+        if success:
+            success = success and self.run_command(
+                "dbt run --select mart_privacy",
+                "dbt privacy pseudonymization models",
+                workdir=self.dbt_project_dir,
+            )
+
+        # Run core marts
+        if success:
+            success = success and self.run_command(
+                "dbt run --select mart_core",
+                "dbt core dimension/fact tables",
+                workdir=self.dbt_project_dir,
+            )
 
         # Then features, scoring, and analytics
         if success:
