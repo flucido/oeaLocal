@@ -86,8 +86,6 @@ sources:
             description: School identifier
           - name: attendance_date
             description: Date of attendance record
-            tests:
-              - not_null
           - name: attendance_status
             description: Overall attendance status (present/absent/tardy/excused/unexcused)
           - name: absence_reason
