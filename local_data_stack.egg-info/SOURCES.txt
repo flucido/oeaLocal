@@ -9,6 +9,7 @@ local_data_stack.egg-info/entry_points.txt
 local_data_stack.egg-info/requires.txt
 local_data_stack.egg-info/top_level.txt
 oss_framework/__init__.py
+oss_framework/config/duckdb_config.py
 oss_framework/dbt/dbt_packages/dbt_utils/tests/__init__.py
 oss_framework/dbt/dbt_packages/dbt_utils/tests/conftest.py
 oss_framework/package_templates/example_sis_package/notebooks/00_package_setup.py
@@ -39,6 +40,7 @@ oss_framework/tests/test_batch_processing.py
 oss_framework/tests/test_data_transformations.py
 oss_framework/tests/test_education_validation.py
 oss_framework/tests/test_stage1_dlt_pipelines.py
+oss_framework/utilities/retry_utils.py
 oss_framework/utilities/setup.py
 oss_framework/utilities/oss_framework/__init__.py
 oss_framework/utilities/oss_framework/batch_processing.py

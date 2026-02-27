@@ -86,15 +86,36 @@ Dynamic: license-file
 
 ```text
 local-data-stack/
--- oss_framework/               # Core pipelines and transformations
--- src/                         # Database connection utilities
--- rill.yaml                    # Rill project configuration
--- connectors/                  # Rill connector configs
--- models/                      # Rill SQL models
--- metrics/                     # Rill dashboard definitions
--- scripts/                     # Orchestration scripts
--- data/                        # Local data storage (stage1, stage2, stage3)
--- README.md                    # Project overview (this file)
+├── oss_framework/               # Core pipelines and transformations
+├── src/                         # Database connection utilities
+├── rill_project/                # Rill dashboards (canonical location)
+│   ├── rill.yaml
+│   ├── connectors/              # DuckDB connector config
+│   ├── dashboards/              # Dashboard definitions
+│   ├── models/                  # SQL models
+│   └── sources/                 # Data source configs
+├── scripts/                     # Orchestration scripts
+├── data/                        # Local data storage (gitignored)
+└── README.md                    # Project overview (this file)
+```
+
+## Available Dashboards
+
+All 5 analytics dashboards are now operational:
+
+| Dashboard | Status | Description |
+|-----------|--------|-------------|
+| **Chronic Absenteeism Risk** | ✅ Working | Monitors students at risk of chronic absenteeism with attendance trends and risk scoring |
+| **Equity Outcomes by Demographics** | ✅ Working | Analyzes outcome disparities across demographic groups (race, ELL, SpEd, FRL) |
+| **Class Effectiveness Analysis** | ✅ Working | Compares class/section performance across schools and courses |
+| **Performance Correlations** | ✅ Working | Analyzes correlations between attendance, discipline, and academic performance |
+| **Student Wellbeing Risk Profiles** | ✅ Working | Identifies students at risk across attendance, discipline, and academic domains |
+
+**Quick Access:**
+```bash
+cd rill_project && rill start
+# Open http://localhost:9009
+```
 
 ## Quick start
 
@@ -126,14 +147,45 @@ rill version
 ### 5) Run the data pipeline
 
 ```bash
-python scripts/run_pipeline.py
-```
+# Run dbt transformations
+cd oss_framework/dbt && dbt build
+
+# Export analytics views to Parquet for Rill
+python3 scripts/export_to_rill.py
 
 ### 6) Start Rill Developer
 
+**Important:** Always start Rill from the `rill_project/` directory:
+
 ```bash
+cd rill_project/
 rill start
 # Opens http://localhost:9009
+# Opens http://localhost:9009
+
+## Data Pipeline Architecture
+
+```
+Aeries API / Excel Files
+         ↓
+   Stage 1: Bronze (Parquet)
+         ↓
+   Stage 2: Silver (DuckDB + dbt)
+         ↓
+   Stage 3: Gold (Analytics Views)
+         ↓
+   Export to Parquet
+         ↓
+   Rill Dashboards
+```
+
+**Update Dashboards After Data Changes:**
+```bash
+# Re-export analytics views to Parquet
+python3 scripts/export_to_rill.py
+
+# Rill auto-refreshes when Parquet files change
+cd rill_project && rill start
 ```
 
 ## Core docs
@@ -141,6 +193,7 @@ rill start
 - **Setup guide:** [docs/SETUP.md](docs/SETUP.md)
 - **Architecture:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - **Rill guide:** [docs/RILL_GUIDE.md](docs/RILL_GUIDE.md)
+- **Contract tests:** [scripts/contracts/README.md](scripts/contracts/README.md)
 
 ## Forked from openedDataEstate
 

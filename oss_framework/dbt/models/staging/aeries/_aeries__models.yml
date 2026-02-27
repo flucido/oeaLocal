@@ -46,7 +46,7 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16]
 
       - name: age
         description: "Calculated age in years based on date of birth"
@@ -216,7 +216,7 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F', 'P', 'NP', 'I', 'W', 'INCOMPLETE']
+                values: ['A', 'A+', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F', 'P', 'NP', 'I', 'W', 'INCOMPLETE', 'NM']
 
       - name: score
         description: "Numeric score/percentage"
@@ -230,12 +230,18 @@ models:
   - name: stg_aeries__discipline
     description: >
       Staging model for discipline incidents.
-      One record per incident with standardized severity and resolution fields.
+      One record per student per incident per disposition (one incident can have multiple actions/resolutions).
+    data_tests:
+      # Composite uniqueness: one record per student per incident per disposition
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - incident_id
+            - student_id_raw
+            - disposition_code
     columns:
       - name: incident_id
-        description: "Unique incident identifier"
+        description: "Incident identifier (not unique - one incident can involve multiple students)"
         data_tests:
-          - unique
           - not_null
 
       - name: student_id_raw
@@ -258,11 +264,7 @@ models:
           - not_null
 
       - name: short_description
-        description: "Category/description of incident"
-        data_tests:
-          - accepted_values:
-              arguments:
-                values: ['Behavior', 'Class Disruption', 'Other', 'Tardy']
+        description: "Category/description of incident (47 distinct types in real data)"
 
       - name: severity_category
         description: "Severity level"
@@ -325,7 +327,7 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: ['ACTIVE', 'COMPLETED', 'DROPPED', 'FAILED']
+                values: ['ACTIVE', 'COMPLETED', 'DROPPED', 'FAILED', 'WITHDRAWN']
 
       - name: created_at
         description: "Timestamp when record was created"

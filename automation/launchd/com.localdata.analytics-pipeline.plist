@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Service Label (unique identifier) -->
+    <key>Label</key>
+    <string>com.localdata.analytics-pipeline</string>
+    
+    <!-- Program to execute -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/flucido/projects/local-data-stack/scripts/schedule_pipeline.sh</string>
+    </array>
+    
+    <!-- Working Directory -->
+    <key>WorkingDirectory</key>
+    <string>/Users/flucido/projects/local-data-stack</string>
+    
+    <!-- Schedule: Daily at 6:00 AM -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>6</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+    
+    <!-- Environment Variables -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>PYTHONUNBUFFERED</key>
+        <string>1</string>
+    </dict>
+    
+    <!-- Logging -->
+    <key>StandardOutPath</key>
+    <string>/Users/flucido/projects/local-data-stack/oss_framework/logs/launchd.log</string>
+    
+    <key>StandardErrorPath</key>
+    <string>/Users/flucido/projects/local-data-stack/oss_framework/logs/launchd_error.log</string>
+    
+    <!-- Run at load (optional - set to false for timer-only) -->
+    <key>RunAtLoad</key>
+    <false/>
+    
+    <!-- Keep alive only while job is running -->
+    <key>KeepAlive</key>
+    <false/>
+    
+    <!-- Resource Limits -->
+    <key>SoftResourceLimits</key>
+    <dict>
+        <!-- Memory limit: 4GB -->
+        <key>MemoryLimit</key>
+        <integer>4294967296</integer>
+        <!-- CPU time limit: 2 hours -->
+        <key>CPUTime</key>
+        <integer>7200</integer>
+    </dict>
+    
+    <key>HardResourceLimits</key>
+    <dict>
+        <key>MemoryLimit</key>
+        <integer>4294967296</integer>
+        <key>CPUTime</key>
+        <integer>7200</integer>
+    </dict>
+    
+    <!-- Nice value (process priority, 0 = normal, 20 = lowest) -->
+    <key>Nice</key>
+    <integer>0</integer>
+    
+    <!-- Enable for debugging -->
+    <key>Debug</key>
+    <false/>
+</dict>
+</plist>

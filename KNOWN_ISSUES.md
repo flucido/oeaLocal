@@ -4,12 +4,87 @@ This document tracks known issues discovered during validation and testing. Thes
 
 ---
 
-## Rill Dashboard Configuration (Validation Phase)
+## Rill Alert Schema Changes (v0.82.1) - RESOLVED ✅
 
-**Status**: Configuration issues, not architecture problems  
-**Impact**: Rill server fails to start with parser errors  
-**Priority**: Medium (Rill optional for core pipeline functionality)
+**Status**: RESOLVED (2026-02-26)  
+**Affected Version**: v0.82.1 (build: 017e474eb4e6ab34f994fcfa9b42e572b38cf7fd, date: 2026-02-25)  
+**Previous Version Issues**: v0.81.4 had different parser errors (see sections below)  
+**Impact**: Alert YAML files required schema updates to work with v0.82.1
 
+
+### Breaking Changes in v0.82.1
+
+Rill v0.82.1 introduced **breaking changes** to the alert YAML schema that caused parser errors on startup:
+
+1. **`description` field removed** - No longer valid at root level (was valid in v0.81.4)
+2. **`webhook_url` → `webhooks` array** - Changed from single URL string to array format
+3. **Documentation lag** - Official docs at https://docs.rilldata.com/reference/project-files/alerts still show v0.81.4 schema as of 2026-02-26
+
+### Parser Errors (Before Fix)
+
+```
+Parser error: field description not found in type parser.AlertYAML
+Parser error: field webhook_url not found in type parser.NotifySpec
+```
+
+### Solution
+
+**BEFORE (v0.81.4 schema - BROKEN in v0.82.1)**:
+```yaml
+type: alert
+description: "Monitor pipeline health metrics"  # ❌ No longer supported
+display_name: "Pipeline Health"
+data:
+  sql: "SELECT ..."
+notify:
+  email:
+    recipients: ["user@example.com"]
+  webhook_url: "https://hooks.slack.com/..."  # ❌ Changed to array format
+```
+
+**AFTER (v0.82.1 schema - WORKING)**:
+```yaml
+type: alert
+# NO description field at root level
+display_name: "Pipeline Health"
+data:
+  sql: "SELECT ..."
+notify:
+  email:
+    recipients: ["user@example.com"]
+  webhooks:  # Changed from webhook_url (singular) to webhooks (array)
+    - url: "https://hooks.slack.com/..."
+```
+
+### Files Fixed
+
+All three alert configuration files were updated:
+
+- `rill_project/alerts/data_freshness_alert.yaml` - Removed `description` field (line 7)
+- `rill_project/alerts/dbt_test_failures.yaml` - Removed `description` field (line 7)
+- `rill_project/alerts/pipeline_health.yaml` - Removed `description` field (line 7) AND changed `webhook_url` to `webhooks` array (line 37)
+
+### Verification
+
+After fixes, Rill v0.82.1 starts with **zero parser errors**:
+
+```bash
+cd rill_project && rill start
+# Output:
+# Reconciling resource {"name": "data_freshness_alert", "type": "Alert"}
+# Reconciling resource {"name": "dbt_test_failures", "type": "Alert"}
+# Reconciling resource {"name": "pipeline_health", "type": "Alert"}
+# Reconciled resource {"name": "data_freshness_alert", "type": "Alert"}
+# Reconciled resource {"name": "dbt_test_failures", "type": "Alert"}
+# Reconciled resource {"name": "pipeline_health", "type": "Alert"}
+# Serving Rill on: http://localhost:9009
+```
+
+All 5 dashboards operational and validated via integration tests (see `test_rill_integration.py`).
+
+---
+
+## Rill Dashboard Configuration (v0.81.4 - Historical)
 ### Issues Found
 
 #### 1. SQL Comment Syntax in Model Files
@@ -246,6 +321,6 @@ The fork is **production-ready** for local education analytics. Rill configurati
 
 - **Rill Documentation**: https://docs.rilldata.com
 - **Rill GitHub**: https://github.com/rilldata/rill
-- **Installed Version**: Rill v0.81.4 (`/opt/homebrew/bin/rill`)
-- **Validation Date**: 2026-02-24
+- **Installed Version**: Rill v0.82.1 (build: 017e474eb4e6ab34f994fcfa9b42e572b38cf7fd, date: 2026-02-25)
+- **Latest Validation Date**: 2026-02-26 (v0.82.1 alert schema fixes + integration tests)
 - **Commit**: `f8e8e08` (Phase 7-9: Complete documentation cleanup, add user guides, validate pipeline)

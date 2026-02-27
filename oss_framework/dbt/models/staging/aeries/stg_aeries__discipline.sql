@@ -46,3 +46,6 @@ SELECT
 
 FROM {{ source('raw', 'raw_discipline') }}
 WHERE created_at IS NOT NULL
+  AND CAST(incident_id AS VARCHAR) != '0'  -- Filter invalid placeholder records
+  AND student_id IS NOT NULL
+  AND incident_id IS NOT NULL

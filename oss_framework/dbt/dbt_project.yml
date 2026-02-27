@@ -95,7 +95,7 @@ models:
     # Analytics layer - DuckDB optimized
     mart_analytics:
       +tags: ['analytics']
-      +schema: 'mart_analytics'
+      # Removed +schema: 'mart_analytics' to prevent duplication - only use nested 'analytics' schema
       aggregations:
         +materialized: table
         +post-hook: "ANALYZE {{ this }}"

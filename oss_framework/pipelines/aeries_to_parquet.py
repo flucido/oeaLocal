@@ -77,6 +77,57 @@ YEARS = ["2020-2021", "2021-2022", "2022-2023", "2023-2024", "2024-2025", "2025-
 COMPRESSION_CODEC = "zstd"
 COMPRESSION_LEVEL = 5
 
+# Data type mappings to preserve leading zeros in ID, code, and phone fields
+DTYPE_MAPPINGS = {
+    "students": {
+        # Student identifiers - preserve leading zeros
+        "StudentID": str,
+        "OldStudentID": str,
+        "StateStudentID": str,
+        "StudentNumber": str,
+        # School codes - preserve leading zeros
+        "SchoolCode": str,
+        "NextSchoolCode": str,
+        # Language and counselor codes
+        "CorrespondenceLanguageCode": str,
+        "CounselorNumber": str,
+        # Address zip codes and extensions - preserve leading zeros
+        "MailingAddressZipCode": str,
+        "MailingAddressZipExt": str,
+        "ResidenceAddressZipCode": str,
+        "ResidenceAddressZipExt": str,
+        # Phone numbers - preserve leading zeros
+        "HomePhone": str,
+        "StudentMobilePhone": str,
+        # User codes - preserve leading zeros
+        "UserCode1": str,
+        "UserCode2": str,
+        "UserCode3": str,
+        "UserCode4": str,
+        "UserCode5": str,
+        "UserCode6": str,
+        "UserCode7": str,
+        "UserCode8": str,
+        "UserCode9": str,
+        "UserCode10": str,
+        "UserCode11": str,
+        "UserCode12": str,
+        "UserCode13": str,
+        # Race codes - preserve leading zeros
+        "RaceCode1": str,
+        "RaceCode2": str,
+        "RaceCode3": str,
+        "RaceCode4": str,
+        "RaceCode5": str,
+    },
+    "attendance": {},
+    "discipline": {},
+    "enrollment": {},
+    "programs": {},
+    "grades": {},
+    "gpa": {},
+}
+
 
 class AeriesToParquetPipeline:
     """Pipeline for converting AeRIES CSV files to Parquet format."""
@@ -158,7 +209,7 @@ class AeriesToParquetPipeline:
                 logger.debug(f"Reading CSV: {csv_file}")
 
             # Read CSV file
-            df = pd.read_csv(csv_file)
+            df = pd.read_csv(csv_file, dtype=DTYPE_MAPPINGS.get(domain, {}))
             rows_read = len(df)
 
             if self.verbose:

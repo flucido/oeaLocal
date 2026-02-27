@@ -31,6 +31,25 @@ local-data-stack/
 ├── data/                        # Local data storage (gitignored)
 └── README.md                    # Project overview (this file)
 ```
+
+## Available Dashboards
+
+All 5 analytics dashboards are now operational:
+
+| Dashboard | Status | Description |
+|-----------|--------|-------------|
+| **Chronic Absenteeism Risk** | ✅ Working | Monitors students at risk of chronic absenteeism with attendance trends and risk scoring |
+| **Equity Outcomes by Demographics** | ✅ Working | Analyzes outcome disparities across demographic groups (race, ELL, SpEd, FRL) |
+| **Class Effectiveness Analysis** | ✅ Working | Compares class/section performance across schools and courses |
+| **Performance Correlations** | ✅ Working | Analyzes correlations between attendance, discipline, and academic performance |
+| **Student Wellbeing Risk Profiles** | ✅ Working | Identifies students at risk across attendance, discipline, and academic domains |
+
+**Quick Access:**
+```bash
+cd rill_project && rill start
+# Open http://localhost:9009
+```
+
 ## Quick start
 
 ### 1) Clone the repository
@@ -61,8 +80,11 @@ rill version
 ### 5) Run the data pipeline
 
 ```bash
-python scripts/run_pipeline.py
-```
+# Run dbt transformations
+cd oss_framework/dbt && dbt build
+
+# Export analytics views to Parquet for Rill
+python3 scripts/export_to_rill.py
 
 ### 6) Start Rill Developer
 
@@ -72,11 +94,31 @@ python scripts/run_pipeline.py
 cd rill_project/
 rill start
 # Opens http://localhost:9009
+# Opens http://localhost:9009
+
+## Data Pipeline Architecture
+
+```
+Aeries API / Excel Files
+         ↓
+   Stage 1: Bronze (Parquet)
+         ↓
+   Stage 2: Silver (DuckDB + dbt)
+         ↓
+   Stage 3: Gold (Analytics Views)
+         ↓
+   Export to Parquet
+         ↓
+   Rill Dashboards
 ```
 
+**Update Dashboards After Data Changes:**
 ```bash
-rill start
-# Opens http://localhost:9009
+# Re-export analytics views to Parquet
+python3 scripts/export_to_rill.py
+
+# Rill auto-refreshes when Parquet files change
+cd rill_project && rill start
 ```
 
 ## Core docs

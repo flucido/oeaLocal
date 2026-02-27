@@ -267,13 +267,18 @@ models:
   - name: fact_discipline
     description: >
       Discipline incidents with pseudonymized student identifiers.
-      Grain: One row per incident.
-
+      Grain: One row per student per incident per disposition (one incident can have multiple actions/resolutions).
+    data_tests:
+      # Composite uniqueness: one record per student per incident per disposition
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - incident_id
+            - student_id_hash
+            - resolution  # Column name in fact_discipline (mapped from disposition_code)
     columns:
       - name: incident_id
-        description: "Unique incident identifier"
+        description: "Incident identifier (not unique - one incident can involve multiple students)"
         data_tests:
-          - unique
           - not_null
 
       - name: student_id_hash

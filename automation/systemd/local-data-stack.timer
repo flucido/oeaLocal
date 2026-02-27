@@ -1,0 +1,26 @@
+[Unit]
+Description=Run Local Data Stack pipeline daily at 6 AM
+Documentation=https://github.com/flucido/local-data-stack
+Requires=local-data-stack.service
+
+[Timer]
+# Daily at 6 AM
+OnCalendar=daily
+OnCalendar=*-*-* 06:00:00
+
+# Add randomization (0-5 minutes) to prevent thundering herd
+RandomizedDelaySec=5min
+
+# Run on boot if missed (e.g., system was off at 6 AM)
+Persistent=true
+
+# Accuracy window (how precise the timing should be)
+AccuracySec=1min
+
+# Prevent overlap - don't start if previous run still active
+#
+ (systemd 250+)
+# Unit=local-data-stack.service
+
+[Install]
+WantedBy=timers.target

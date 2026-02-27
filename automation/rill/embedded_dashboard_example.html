@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rill Embedded Dashboard - Education Analytics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+        }
+        
+        header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            padding: 20px 30px;
+            background: #fafafa;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .controls label {
+            font-weight: 500;
+            margin-right: 5px;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button.secondary {
+            background: #6c757d;
+        }
+        
+        button.secondary:hover {
+            background: #5a6268;
+        }
+        
+        select, input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        #rill-iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+            display: block;
+        }
+        
+        .status {
+            padding: 10px 30px;
+            background: #fff3cd;
+            border-bottom: 1px solid #ffc107;
+            font-size: 14px;
+        }
+        
+        .status.connected {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffc107;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        .status.connected .status-indicator {
+            background: #28a745;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .logs {
+            margin: 20px 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .log-time {
+            color: #6c757d;
+            margin-right: 10px;
+        }
+        
+        .log-event {
+            color: #007bff;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Education Analytics Dashboard</h1>
+            <p>Embedded Rill Dashboard with PostMessage API Integration</p>
+        </header>
+        
+        <div id="status" class="status">
+            <span class="status-indicator"></span>
+            <span id="status-text">Connecting to dashboard...</span>
+        </div>
+        
+        <div class="controls">
+            <div>
+                <label for="dashboard-select">Dashboard:</label>
+                <select id="dashboard-select">
+                    <option value="chronic-absenteeism-risk">Chronic Absenteeism Risk</option>
+                    <option value="wellbeing-risk-profiles">Student Wellbeing Risk</option>
+                    <option value="equity-outcomes-by-demographics">Equity Outcomes</option>
+                    <option value="class-effectiveness">Class Effectiveness</option>
+                    <option value="performance-correlations">Performance Correlations</option>
+                </select>
+            </div>
+            
+            <button onclick="applyFilters()">🔍 Apply Filters</button>
+            <button onclick="setDarkMode()" class="secondary">🌙 Dark Mode</button>
+            <button onclick="setLightMode()" class="secondary">☀️ Light Mode</button>
+            <button onclick="togglePivotView()" class="secondary">📊 Toggle Pivot</button>
+            <button onclick="getState()">📋 Get State</button>
+            <button onclick="clearLogs()" class="secondary">🗑️ Clear Logs</button>
+        </div>
+        
+        <iframe id="rill-iframe" src="http://localhost:9009/chronic-absenteeism-risk"></iframe>
+        
+        <div class="logs" id="logs">
+            <div class="log-entry">
+                <span class="log-time">[Waiting for connection...]</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        /**
+         * Rill PostMessage API Integration
+         * 
+         * Reference: https://github.com/rilldata/rill/blob/main/docs/blog/0.56.md
+         * 
+         * Available Methods:
+         * - setState(state: string): Set dashboard state (filters, time range, view)
+         * - getState(): Get current dashboard state
+         * - setThemeMode(mode: 'light' | 'dark'): Change theme
+         * - setAiPane(open: boolean): Toggle AI pane
+         * 
+         * Events:
+         * - ready: Iframe ready for communication
+         * - stateChanged: Dashboard state changed
+         */
+        
+        const iframe = document.getElementById("rill-iframe");
+        const statusElement = document.getElementById("status");
+        const statusText = document.getElementById("status-text");
+        const logsElement = document.getElementById("logs");
+        
+        let isReady = false;
+        let currentView = 'time-series';  // or 'pivot'
+        
+        /**
+         * Send a JSON-RPC request to the iframe and wait for response
+         */
+        function sendRequest(method, params) {
+            const id = Math.random().toString(36).substr(2, 9);
+            
+            return new Promise((resolve, reject) => {
+                function handler(event) {
+                    // Validate origin (adjust for production)
+                    // if (event.origin !== 'http://localhost:9009') return;
+                    
+                    if (event.data?.id === id) {
+                        window.removeEventListener("message", handler);
+                        
+                        if (event.data.result !== undefined) {
+                            resolve(event.data.result);
+                        } else {
+                            reject(event.data.error);
+                        }
+                    }
+                }
+                
+                window.addEventListener("message", handler);
+                
+                // Send request
+                iframe.contentWindow.postMessage({ id, method, params }, "*");
+                
+                logEvent('REQUEST', `${method}(${JSON.stringify(params)})`);
+            });
+        }
+        
+        /**
+         * Listen for events from the iframe
+         */
+        window.addEventListener("message", (event) => {
+            const { method, params } = event.data;
+            
+            // Handle 'ready' event
+            if (method === "ready") {
+                isReady = true;
+                statusElement.classList.add("connected");
+                statusText.textContent = "Dashboard connected successfully";
+                logEvent('READY', 'Dashboard iframe ready for communication');
+                
+                // Optional: Set initial state
+                // sendRequest("setState", "school_code=001&risk_level=High");
+            }
+            
+            // Handle 'stateChanged' event
+            if (method === "stateChanged") {
+                logEvent('STATE_CHANGED', JSON.stringify(params.state));
+            }
+        });
+        
+        /**
+         * Apply filters to the dashboard
+         */
+        async function applyFilters() {
+            if (!isReady) {
+                alert("Dashboard not ready yet. Please wait...");
+                return;
+            }
+            
+            try {
+                // Example: Filter by school and risk level
+                // Adjust based on your dashboard's available dimensions
+                const state = "school_code=001&risk_level=High&grade_level=9";
+                await sendRequest("setState", state);
+                logEvent('SUCCESS', 'Filters applied successfully');
+            } catch (error) {
+                logEvent('ERROR', `Failed to apply filters: ${error.message || error}`);
+            }
+        }
+        
+        /**
+         * Set dark mode
+         */
+        async function setDarkMode() {
+            if (!isReady) return;
+            
+            try {
+                await sendRequest("setThemeMode", "dark");
+                logEvent('SUCCESS', 'Dark mode activated');
+            } catch (error) {
+                logEvent('ERROR', `Failed to set dark mode: ${error.message || error}`);
+            }
+        }
+        
+        /**
+         * Set light mode
+         */
+        async function setLightMode() {
+            if (!isReady) return;
+            
+            try {
+                await sendRequest("setThemeMode", "light");
+                logEvent('SUCCESS', 'Light mode activated');
+            } catch (error) {
+                logEvent('ERROR', `Failed to set light mode: ${error.message || error}`);
+            }
+        }
+        
+        /**
+         * Toggle between time-series and pivot view
+         */
+        async function togglePivotView() {
+            if (!isReady) return;
+            
+            try {
+                currentView = currentView === 'time-series' ? 'pivot' : 'time-series';
+                const state = `view=${currentView}`;
+                await sendRequest("setState", state);
+                logEvent('SUCCESS', `Switched to ${currentView} view`);
+            } catch (error) {
+                logEvent('ERROR', `Failed to toggle view: ${error.message || error}`);
+            }
+        }
+        
+        /**
+         * Get current dashboard state
+         */
+        async function getState() {
+            if (!isReady) return;
+            
+            try {
+                const state = await sendRequest("getState");
+                logEvent('STATE', JSON.stringify(state, null, 2));
+                console.log("Current dashboard state:", state);
+            } catch (error) {
+                logEvent('ERROR', `Failed to get state: ${error.message || error}`);
+            }
+        }
+        
+        /**
+         * Change dashboard on dropdown selection
+         */
+        document.getElementById("dashboard-select").addEventListener("change", (e) => {
+            const dashboard = e.target.value;
+            iframe.src = `http://localhost:9009/${dashboard}`;
+            isReady = false;
+            statusElement.classList.remove("connected");
+            statusText.textContent = "Switching dashboard...";
+            logEvent('INFO', `Loading dashboard: ${dashboard}`);
+        });
+        
+        /**
+         * Log events to the UI
+         */
+        function logEvent(level, message) {
+            const time = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span class="log-time">[${time}]</span>
+                <span class="log-event">${level}</span>
+                <span>${message}</span>
+            `;
+            logsElement.appendChild(entry);
+            logsElement.scrollTop = logsElement.scrollHeight;
+        }
+        
+        /**
+         * Clear logs
+         */
+        function clearLogs() {
+            logsElement.innerHTML = '<div class="log-entry"><span class="log-time">[Logs cleared]</span></div>';
+        }
+    </script>
+</body>
+</html>

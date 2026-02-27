@@ -1,0 +1,1433 @@
+{
+  "timestamp": "2026-02-26T23:54:33.301227",
+  "domains_profiled": 7,
+  "total_rows": 26508,
+  "domains": {
+    "students": {
+      "domain": "students",
+      "file_path": "oss_framework/data/stage1/aeries/students/year=2025-2026/part-000.parquet",
+      "timestamp": "2026-02-26T23:54:33.301253",
+      "file_size_bytes": 128271,
+      "row_count": 851,
+      "column_count": 82,
+      "columns": [
+        "StudentID",
+        "OldStudentID",
+        "CorrespondenceLanguageCode",
+        "CounselorNumber",
+        "StudentPersonalEmailAddress",
+        "NameSuffix",
+        "SchoolCode",
+        "StudentNumber",
+        "StateStudentID",
+        "LastName",
+        "FirstName",
+        "MiddleName",
+        "LastNameAlias",
+        "FirstNameAlias",
+        "MiddleNameAlias",
+        "Gender",
+        "Grade",
+        "GradeLevelShortDescription",
+        "GradeLevelLongDescription",
+        "Birthdate",
+        "ParentGuardianName",
+        "HomePhone",
+        "StudentMobilePhone",
+        "MailingAddress",
+        "MailingAddressCity",
+        "MailingAddressState",
+        "MailingAddressZipCode",
+        "MailingAddressZipExt",
+        "ResidenceAddress",
+        "ResidenceAddressCity",
+        "ResidenceAddressState",
+        "ResidenceAddressZipCode",
+        "ResidenceAddressZipExt",
+        "AddressVerified",
+        "EthnicityCode",
+        "RaceCode1",
+        "RaceCode2",
+        "RaceCode3",
+        "RaceCode4",
+        "RaceCode5",
+        "UserCode1",
+        "UserCode2",
+        "UserCode3",
+        "UserCode4",
+        "UserCode5",
+        "UserCode6",
+        "UserCode7",
+        "UserCode8",
+        "UserCode9",
+        "UserCode10",
+        "UserCode11",
+        "UserCode12",
+        "UserCode13",
+        "SchoolEnterDate",
+        "SchoolLeaveDate",
+        "DistrictEnterDate",
+        "Track",
+        "AttendanceProgramCodePrimary",
+        "AttendanceProgramCodeAdditional1",
+        "AttendanceProgramCodeAdditional2",
+        "LockerNumber",
+        "LowSchedulingPeriod",
+        "HighSchedulingPeriod",
+        "InactiveStatusCode",
+        "FamilyKey",
+        "LanguageFluencyCode",
+        "HomeLanguageCode",
+        "ParentEdLevelCode",
+        "ParentEmailAddress",
+        "StudentEmailAddress",
+        "NetworkLoginID",
+        "EarlyWarningPoints",
+        "HomeRoomTeacherNumber",
+        "NotificationPreferenceCode",
+        "NextSchoolCode",
+        "NextGrade",
+        "NextGradeLevelShortDescription",
+        "NextGradeLevelLongDescription",
+        "RecordsReleaseCode",
+        "AcademicYear",
+        "ExtractedAt",
+        "year"
+      ],
+      "schema": {
+        "StudentID": "VARCHAR",
+        "OldStudentID": "VARCHAR",
+        "CorrespondenceLanguageCode": "VARCHAR",
+        "CounselorNumber": "VARCHAR",
+        "StudentPersonalEmailAddress": "DOUBLE",
+        "NameSuffix": "VARCHAR",
+        "SchoolCode": "VARCHAR",
+        "StudentNumber": "VARCHAR",
+        "StateStudentID": "VARCHAR",
+        "LastName": "VARCHAR",
+        "FirstName": "VARCHAR",
+        "MiddleName": "VARCHAR",
+        "LastNameAlias": "DOUBLE",
+        "FirstNameAlias": "VARCHAR",
+        "MiddleNameAlias": "DOUBLE",
+        "Gender": "VARCHAR",
+        "Grade": "BIGINT",
+        "GradeLevelShortDescription": "BIGINT",
+        "GradeLevelLongDescription": "VARCHAR",
+        "Birthdate": "VARCHAR",
+        "ParentGuardianName": "VARCHAR",
+        "HomePhone": "VARCHAR",
+        "StudentMobilePhone": "VARCHAR",
+        "MailingAddress": "VARCHAR",
+        "MailingAddressCity": "VARCHAR",
+        "MailingAddressState": "VARCHAR",
+        "MailingAddressZipCode": "VARCHAR",
+        "MailingAddressZipExt": "INTEGER",
+        "ResidenceAddress": "VARCHAR",
+        "ResidenceAddressCity": "VARCHAR",
+        "ResidenceAddressState": "VARCHAR",
+        "ResidenceAddressZipCode": "VARCHAR",
+        "ResidenceAddressZipExt": "INTEGER",
+        "AddressVerified": "BOOLEAN",
+        "EthnicityCode": "VARCHAR",
+        "RaceCode1": "VARCHAR",
+        "RaceCode2": "VARCHAR",
+        "RaceCode3": "VARCHAR",
+        "RaceCode4": "VARCHAR",
+        "RaceCode5": "INTEGER",
+        "UserCode1": "VARCHAR",
+        "UserCode2": "VARCHAR",
+        "UserCode3": "VARCHAR",
+        "UserCode4": "VARCHAR",
+        "UserCode5": "VARCHAR",
+        "UserCode6": "VARCHAR",
+        "UserCode7": "VARCHAR",
+        "UserCode8": "VARCHAR",
+        "UserCode9": "VARCHAR",
+        "UserCode10": "VARCHAR",
+        "UserCode11": "VARCHAR",
+        "UserCode12": "VARCHAR",
+        "UserCode13": "INTEGER",
+        "SchoolEnterDate": "VARCHAR",
+        "SchoolLeaveDate": "VARCHAR",
+        "DistrictEnterDate": "VARCHAR",
+        "Track": "DOUBLE",
+        "AttendanceProgramCodePrimary": "VARCHAR",
+        "AttendanceProgramCodeAdditional1": "DOUBLE",
+        "AttendanceProgramCodeAdditional2": "DOUBLE",
+        "LockerNumber": "VARCHAR",
+        "LowSchedulingPeriod": "BIGINT",
+        "HighSchedulingPeriod": "BIGINT",
+        "InactiveStatusCode": "VARCHAR",
+        "FamilyKey": "BIGINT",
+        "LanguageFluencyCode": "VARCHAR",
+        "HomeLanguageCode": "BIGINT",
+        "ParentEdLevelCode": "DOUBLE",
+        "ParentEmailAddress": "VARCHAR",
+        "StudentEmailAddress": "VARCHAR",
+        "NetworkLoginID": "DOUBLE",
+        "EarlyWarningPoints": "DOUBLE",
+        "HomeRoomTeacherNumber": "BIGINT",
+        "NotificationPreferenceCode": "DOUBLE",
+        "NextSchoolCode": "VARCHAR",
+        "NextGrade": "BIGINT",
+        "NextGradeLevelShortDescription": "BIGINT",
+        "NextGradeLevelLongDescription": "VARCHAR",
+        "RecordsReleaseCode": "DOUBLE",
+        "AcademicYear": "VARCHAR",
+        "ExtractedAt": "VARCHAR",
+        "year": "VARCHAR"
+      },
+      "missing_values": {
+        "total_rows": 851,
+        "columns_with_nulls": {
+          "CorrespondenceLanguageCode": {
+            "null_count": 184,
+            "null_percentage": 21.62
+          },
+          "StudentPersonalEmailAddress": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "NameSuffix": {
+            "null_count": 850,
+            "null_percentage": 99.88
+          },
+          "StateStudentID": {
+            "null_count": 1,
+            "null_percentage": 0.12
+          },
+          "MiddleName": {
+            "null_count": 80,
+            "null_percentage": 9.4
+          },
+          "LastNameAlias": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "FirstNameAlias": {
+            "null_count": 840,
+            "null_percentage": 98.71
+          },
+          "MiddleNameAlias": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "HomePhone": {
+            "null_count": 1,
+            "null_percentage": 0.12
+          },
+          "StudentMobilePhone": {
+            "null_count": 840,
+            "null_percentage": 98.71
+          },
+          "MailingAddressZipExt": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "ResidenceAddressZipExt": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "RaceCode2": {
+            "null_count": 754,
+            "null_percentage": 88.6
+          },
+          "RaceCode3": {
+            "null_count": 836,
+            "null_percentage": 98.24
+          },
+          "RaceCode4": {
+            "null_count": 847,
+            "null_percentage": 99.53
+          },
+          "RaceCode5": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "UserCode1": {
+            "null_count": 842,
+            "null_percentage": 98.94
+          },
+          "UserCode2": {
+            "null_count": 845,
+            "null_percentage": 99.29
+          },
+          "UserCode3": {
+            "null_count": 829,
+            "null_percentage": 97.41
+          },
+          "UserCode4": {
+            "null_count": 847,
+            "null_percentage": 99.53
+          },
+          "UserCode5": {
+            "null_count": 832,
+            "null_percentage": 97.77
+          },
+          "UserCode6": {
+            "null_count": 793,
+            "null_percentage": 93.18
+          },
+          "UserCode7": {
+            "null_count": 850,
+            "null_percentage": 99.88
+          },
+          "UserCode8": {
+            "null_count": 826,
+            "null_percentage": 97.06
+          },
+          "UserCode9": {
+            "null_count": 756,
+            "null_percentage": 88.84
+          },
+          "UserCode10": {
+            "null_count": 842,
+            "null_percentage": 98.94
+          },
+          "UserCode11": {
+            "null_count": 756,
+            "null_percentage": 88.84
+          },
+          "UserCode12": {
+            "null_count": 834,
+            "null_percentage": 98.0
+          },
+          "UserCode13": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "SchoolLeaveDate": {
+            "null_count": 818,
+            "null_percentage": 96.12
+          },
+          "Track": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "AttendanceProgramCodePrimary": {
+            "null_count": 824,
+            "null_percentage": 96.83
+          },
+          "AttendanceProgramCodeAdditional1": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "AttendanceProgramCodeAdditional2": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "LockerNumber": {
+            "null_count": 237,
+            "null_percentage": 27.85
+          },
+          "InactiveStatusCode": {
+            "null_count": 621,
+            "null_percentage": 72.97
+          },
+          "LanguageFluencyCode": {
+            "null_count": 1,
+            "null_percentage": 0.12
+          },
+          "ParentEdLevelCode": {
+            "null_count": 1,
+            "null_percentage": 0.12
+          },
+          "ParentEmailAddress": {
+            "null_count": 7,
+            "null_percentage": 0.82
+          },
+          "NetworkLoginID": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          },
+          "NotificationPreferenceCode": {
+            "null_count": 850,
+            "null_percentage": 99.88
+          },
+          "RecordsReleaseCode": {
+            "null_count": 851,
+            "null_percentage": 100.0
+          }
+        },
+        "critical_nulls": {
+          "CorrespondenceLanguageCode": {
+            "null_count": 184,
+            "null_percentage": 21.62,
+            "severity": "HIGH"
+          }
+        }
+      },
+      "critical_fields": {
+        "StudentID": {
+          "column_name": "StudentID",
+          "found": true,
+          "data_type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0,
+          "distinct_count": 851,
+          "sample_values": [
+            "44360",
+            "44403",
+            "44926",
+            "44974",
+            "44237"
+          ]
+        },
+        "CorrespondenceLanguageCode": {
+          "column_name": "CorrespondenceLanguageCode",
+          "found": true,
+          "data_type": "VARCHAR",
+          "null_count": 184,
+          "null_pct": 21.62,
+          "distinct_count": 7,
+          "sample_values": [
+            "00",
+            "17",
+            "18",
+            "11",
+            "04"
+          ]
+        },
+        "MailingAddressZipCode": {
+          "column_name": "MailingAddressZipCode",
+          "found": true,
+          "data_type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0,
+          "distinct_count": 9,
+          "sample_values": [
+            "94804",
+            "95812",
+            "94964",
+            "94901",
+            "94903"
+          ]
+        }
+      },
+      "pii_analysis": {
+        "total_students": 851,
+        "pii_fields_found": {
+          "StudentID": true,
+          "FirstName": true,
+          "LastName": true,
+          "StudentEmailAddress": true,
+          "BirthDate": false,
+          "HomePhone": true,
+          "StudentMobilePhone": true,
+          "MailingAddressLine1": false,
+          "MailingAddressLine2": false,
+          "MailingAddressCity": true,
+          "MailingAddressState": true,
+          "MailingAddressZipCode": true
+        },
+        "completeness_by_field": {
+          "StudentID": {
+            "non_null_count": 851,
+            "completeness_pct": 100.0,
+            "missing_count": 0
+          },
+          "FirstName": {
+            "non_null_count": 851,
+            "completeness_pct": 100.0,
+            "missing_count": 0
+          },
+          "LastName": {
+            "non_null_count": 851,
+            "completeness_pct": 100.0,
+            "missing_count": 0
+          },
+          "StudentEmailAddress": {
+            "non_null_count": 851,
+            "completeness_pct": 100.0,
+            "missing_count": 0
+          },
+          "HomePhone": {
+            "non_null_count": 850,
+            "completeness_pct": 99.88,
+            "missing_count": 1
+          },
+          "StudentMobilePhone": {
+            "non_null_count": 11,
+            "completeness_pct": 1.29,
+            "missing_count": 840
+          },
+          "MailingAddressCity": {
+            "non_null_count": 851,
+            "completeness_pct": 100.0,
+            "missing_count": 0
+          },
+          "MailingAddressState": {
+            "non_null_count": 851,
+            "completeness_pct": 100.0,
+            "missing_count": 0
+          },
+          "MailingAddressZipCode": {
+            "non_null_count": 851,
+            "completeness_pct": 100.0,
+            "missing_count": 0
+          }
+        },
+        "recommendations": [
+          "Missing PII field: BirthDate",
+          "HomePhone: 0.1% missing values",
+          "StudentMobilePhone: 98.7% missing values",
+          "Missing PII field: MailingAddressLine1",
+          "Missing PII field: MailingAddressLine2"
+        ]
+      },
+      "duplicates": {
+        "total_rows": 851,
+        "distinct_student_ids": 851,
+        "duplicate_rows": 0,
+        "has_duplicates": false,
+        "uniqueness_pct": 100.0
+      },
+      "distributions": {
+        "CorrespondenceLanguageCode": {
+          "top_values": [
+            {
+              "value": "00",
+              "count": 568
+            },
+            {
+              "value": "None",
+              "count": 184
+            },
+            {
+              "value": "01",
+              "count": 94
+            },
+            {
+              "value": "17",
+              "count": 1
+            },
+            {
+              "value": "11",
+              "count": 1
+            },
+            {
+              "value": "18",
+              "count": 1
+            },
+            {
+              "value": "04",
+              "count": 1
+            },
+            {
+              "value": "06",
+              "count": 1
+            }
+          ],
+          "total_distinct": 8
+        },
+        "Gender": {
+          "top_values": [
+            {
+              "value": "F",
+              "count": 447
+            },
+            {
+              "value": "M",
+              "count": 404
+            }
+          ],
+          "total_distinct": 2
+        },
+        "EthnicityCode": {
+          "top_values": [
+            {
+              "value": "N",
+              "count": 621
+            },
+            {
+              "value": "Y",
+              "count": 221
+            },
+            {
+              "value": "U",
+              "count": 9
+            }
+          ],
+          "total_distinct": 3
+        }
+      }
+    },
+    "attendance": {
+      "domain": "attendance",
+      "file_path": "oss_framework/data/stage1/aeries/attendance_transformed/year=2025-2026/part-000.parquet",
+      "timestamp": "2026-02-26T23:54:33.352644",
+      "file_size_bytes": 46419,
+      "row_count": 5756,
+      "column_count": 27,
+      "columns": [
+        "StudentID",
+        "AcademicYear",
+        "ExtractedAt",
+        "AttendanceProgramCodePrimary",
+        "ReportingSchoolCode",
+        "DaysCompleteIndependentStudy",
+        "DaysIncompleteIndependentStudy",
+        "DaysInSchoolSuspension",
+        "PeriodsExpectedToAttend",
+        "PeriodsAttended",
+        "PeriodsOutOfSchoolSuspension",
+        "PeriodsAttendedInSchoolSuspension",
+        "PeriodsExcusedAbsence",
+        "PeriodsUnexcusedAbsence",
+        "PeriodsCompleteIndependentStudy",
+        "PeriodsIncompleteIndependentStudy",
+        "SchoolYear",
+        "SchoolCode",
+        "DaysEnrolled",
+        "DaysPresent",
+        "DaysAbsence",
+        "DaysExcused",
+        "DaysUnexcused",
+        "DaysTardy",
+        "DaysOfTruancy",
+        "DaysSuspension",
+        "year"
+      ],
+      "schema": {
+        "StudentID": "BIGINT",
+        "AcademicYear": "VARCHAR",
+        "ExtractedAt": "VARCHAR",
+        "AttendanceProgramCodePrimary": "VARCHAR",
+        "ReportingSchoolCode": "BIGINT",
+        "DaysCompleteIndependentStudy": "BIGINT",
+        "DaysIncompleteIndependentStudy": "BIGINT",
+        "DaysInSchoolSuspension": "BIGINT",
+        "PeriodsExpectedToAttend": "BIGINT",
+        "PeriodsAttended": "BIGINT",
+        "PeriodsOutOfSchoolSuspension": "BIGINT",
+        "PeriodsAttendedInSchoolSuspension": "BIGINT",
+        "PeriodsExcusedAbsence": "BIGINT",
+        "PeriodsUnexcusedAbsence": "BIGINT",
+        "PeriodsCompleteIndependentStudy": "BIGINT",
+        "PeriodsIncompleteIndependentStudy": "BIGINT",
+        "SchoolYear": "VARCHAR",
+        "SchoolCode": "BIGINT",
+        "DaysEnrolled": "BIGINT",
+        "DaysPresent": "BIGINT",
+        "DaysAbsence": "BIGINT",
+        "DaysExcused": "BIGINT",
+        "DaysUnexcused": "BIGINT",
+        "DaysTardy": "BIGINT",
+        "DaysOfTruancy": "BIGINT",
+        "DaysSuspension": "BIGINT",
+        "year": "VARCHAR"
+      },
+      "missing_values": {
+        "total_rows": 5756,
+        "columns_with_nulls": {
+          "AttendanceProgramCodePrimary": {
+            "null_count": 5177,
+            "null_percentage": 89.94
+          }
+        },
+        "critical_nulls": {}
+      },
+      "critical_fields": {
+        "StudentID": {
+          "column_name": "StudentID",
+          "found": true,
+          "data_type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0,
+          "distinct_count": 850
+        }
+      },
+      "duplicates": {
+        "total_rows": 5756,
+        "distinct_student_ids": 850,
+        "duplicate_rows": 4906,
+        "has_duplicates": true,
+        "uniqueness_pct": 14.77
+      },
+      "distributions": {}
+    },
+    "discipline": {
+      "domain": "discipline",
+      "file_path": "oss_framework/data/stage1/aeries/discipline_transformed/year=2025-2026/part-000.parquet",
+      "timestamp": "2026-02-26T23:54:33.361735",
+      "file_size_bytes": 61805,
+      "row_count": 631,
+      "column_count": 59,
+      "columns": [
+        "StudentID",
+        "AcademicYear",
+        "ExtractedAt",
+        "ShortDescription",
+        "StaffReferral",
+        "ReferredByOther",
+        "SequenceNumber",
+        "IncidentDate",
+        "IncidentID",
+        "ExactTime",
+        "ApproximateTimeCode",
+        "SchoolOfIncidentCode",
+        "LocationCode",
+        "PossibleMotivationCode",
+        "WeaponTypeCode",
+        "Demerits",
+        "Initials",
+        "InstructionalSupportIndicator",
+        "Comment",
+        "IsSubstituteTeacherReferral",
+        "ViolationCode1",
+        "ViolationCode2",
+        "ViolationCode3",
+        "ViolationCode4",
+        "ViolationCode5",
+        "PreReferralInterventionCode1",
+        "PreReferralInterventionCode2",
+        "PreReferralInterventionCode3",
+        "UserCode1",
+        "UserCode2",
+        "UserCode3",
+        "UserCode4",
+        "UserCode5",
+        "UserCode6",
+        "UserCode7",
+        "UserCode8",
+        "Admin_StudentID",
+        "Admin_AssignedDays",
+        "Admin_AssignedHours",
+        "Admin_AssignedStartDate",
+        "Admin_AssignedEndDate",
+        "Admin_AssignedReturnDate",
+        "Admin_ReasonForDifferenceCode",
+        "Admin_DisciplinaryAssignmentSchoolCode",
+        "Admin_ActionDecisionDate",
+        "Admin_SequenceNumber",
+        "Admin_DispositionCode",
+        "Admin_Days",
+        "Admin_Hours",
+        "Admin_StartDate",
+        "Admin_EndDate",
+        "Admin_ReturnDate",
+        "Admin_ReturnStatusCode",
+        "Admin_ReturnLocationCode",
+        "Admin_ActionAuthorityCode",
+        "Admin_PlacementCode",
+        "Admin_ResultCode",
+        "Admin_SuspensionTagCode",
+        "year"
+      ],
+      "schema": {
+        "StudentID": "BIGINT",
+        "AcademicYear": "VARCHAR",
+        "ExtractedAt": "VARCHAR",
+        "ShortDescription": "VARCHAR",
+        "StaffReferral": "BIGINT",
+        "ReferredByOther": "VARCHAR",
+        "SequenceNumber": "BIGINT",
+        "IncidentDate": "VARCHAR",
+        "IncidentID": "BIGINT",
+        "ExactTime": "VARCHAR",
+        "ApproximateTimeCode": "DOUBLE",
+        "SchoolOfIncidentCode": "BIGINT",
+        "LocationCode": "DOUBLE",
+        "PossibleMotivationCode": "VARCHAR",
+        "WeaponTypeCode": "DOUBLE",
+        "Demerits": "DOUBLE",
+        "Initials": "VARCHAR",
+        "InstructionalSupportIndicator": "DOUBLE",
+        "Comment": "VARCHAR",
+        "IsSubstituteTeacherReferral": "BOOLEAN",
+        "ViolationCode1": "VARCHAR",
+        "ViolationCode2": "VARCHAR",
+        "ViolationCode3": "DOUBLE",
+        "ViolationCode4": "DOUBLE",
+        "ViolationCode5": "DOUBLE",
+        "PreReferralInterventionCode1": "DOUBLE",
+        "PreReferralInterventionCode2": "DOUBLE",
+        "PreReferralInterventionCode3": "DOUBLE",
+        "UserCode1": "DOUBLE",
+        "UserCode2": "DOUBLE",
+        "UserCode3": "DOUBLE",
+        "UserCode4": "DOUBLE",
+        "UserCode5": "DOUBLE",
+        "UserCode6": "DOUBLE",
+        "UserCode7": "DOUBLE",
+        "UserCode8": "DOUBLE",
+        "Admin_StudentID": "DOUBLE",
+        "Admin_AssignedDays": "DOUBLE",
+        "Admin_AssignedHours": "DOUBLE",
+        "Admin_AssignedStartDate": "DOUBLE",
+        "Admin_AssignedEndDate": "DOUBLE",
+        "Admin_AssignedReturnDate": "DOUBLE",
+        "Admin_ReasonForDifferenceCode": "VARCHAR",
+        "Admin_DisciplinaryAssignmentSchoolCode": "DOUBLE",
+        "Admin_ActionDecisionDate": "DOUBLE",
+        "Admin_SequenceNumber": "DOUBLE",
+        "Admin_DispositionCode": "VARCHAR",
+        "Admin_Days": "DOUBLE",
+        "Admin_Hours": "DOUBLE",
+        "Admin_StartDate": "VARCHAR",
+        "Admin_EndDate": "VARCHAR",
+        "Admin_ReturnDate": "VARCHAR",
+        "Admin_ReturnStatusCode": "VARCHAR",
+        "Admin_ReturnLocationCode": "DOUBLE",
+        "Admin_ActionAuthorityCode": "DOUBLE",
+        "Admin_PlacementCode": "DOUBLE",
+        "Admin_ResultCode": "DOUBLE",
+        "Admin_SuspensionTagCode": "VARCHAR",
+        "year": "VARCHAR"
+      },
+      "missing_values": {
+        "total_rows": 631,
+        "columns_with_nulls": {
+          "ShortDescription": {
+            "null_count": 467,
+            "null_percentage": 74.01
+          },
+          "ReferredByOther": {
+            "null_count": 609,
+            "null_percentage": 96.51
+          },
+          "ExactTime": {
+            "null_count": 565,
+            "null_percentage": 89.54
+          },
+          "ApproximateTimeCode": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "LocationCode": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "PossibleMotivationCode": {
+            "null_count": 582,
+            "null_percentage": 92.23
+          },
+          "WeaponTypeCode": {
+            "null_count": 618,
+            "null_percentage": 97.94
+          },
+          "Initials": {
+            "null_count": 553,
+            "null_percentage": 87.64
+          },
+          "InstructionalSupportIndicator": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "Comment": {
+            "null_count": 191,
+            "null_percentage": 30.27
+          },
+          "ViolationCode1": {
+            "null_count": 33,
+            "null_percentage": 5.23
+          },
+          "ViolationCode2": {
+            "null_count": 613,
+            "null_percentage": 97.15
+          },
+          "ViolationCode3": {
+            "null_count": 630,
+            "null_percentage": 99.84
+          },
+          "ViolationCode4": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "ViolationCode5": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "PreReferralInterventionCode1": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "PreReferralInterventionCode2": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "PreReferralInterventionCode3": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "UserCode1": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "UserCode2": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "UserCode3": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "UserCode4": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "UserCode5": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "UserCode6": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "UserCode7": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "UserCode8": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "Admin_StudentID": {
+            "null_count": 244,
+            "null_percentage": 38.67
+          },
+          "Admin_AssignedDays": {
+            "null_count": 244,
+            "null_percentage": 38.67
+          },
+          "Admin_AssignedHours": {
+            "null_count": 244,
+            "null_percentage": 38.67
+          },
+          "Admin_AssignedStartDate": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "Admin_AssignedEndDate": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "Admin_AssignedReturnDate": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "Admin_ReasonForDifferenceCode": {
+            "null_count": 616,
+            "null_percentage": 97.62
+          },
+          "Admin_DisciplinaryAssignmentSchoolCode": {
+            "null_count": 244,
+            "null_percentage": 38.67
+          },
+          "Admin_ActionDecisionDate": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "Admin_SequenceNumber": {
+            "null_count": 244,
+            "null_percentage": 38.67
+          },
+          "Admin_DispositionCode": {
+            "null_count": 244,
+            "null_percentage": 38.67
+          },
+          "Admin_Days": {
+            "null_count": 244,
+            "null_percentage": 38.67
+          },
+          "Admin_Hours": {
+            "null_count": 244,
+            "null_percentage": 38.67
+          },
+          "Admin_StartDate": {
+            "null_count": 535,
+            "null_percentage": 84.79
+          },
+          "Admin_EndDate": {
+            "null_count": 537,
+            "null_percentage": 85.1
+          },
+          "Admin_ReturnDate": {
+            "null_count": 537,
+            "null_percentage": 85.1
+          },
+          "Admin_ReturnStatusCode": {
+            "null_count": 606,
+            "null_percentage": 96.04
+          },
+          "Admin_ReturnLocationCode": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "Admin_ActionAuthorityCode": {
+            "null_count": 553,
+            "null_percentage": 87.64
+          },
+          "Admin_PlacementCode": {
+            "null_count": 623,
+            "null_percentage": 98.73
+          },
+          "Admin_ResultCode": {
+            "null_count": 631,
+            "null_percentage": 100.0
+          },
+          "Admin_SuspensionTagCode": {
+            "null_count": 616,
+            "null_percentage": 97.62
+          }
+        },
+        "critical_nulls": {}
+      },
+      "critical_fields": {
+        "StudentID": {
+          "column_name": "StudentID",
+          "found": true,
+          "data_type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0,
+          "distinct_count": 230
+        },
+        "IncidentDate": {
+          "column_name": "IncidentDate",
+          "found": true,
+          "data_type": "VARCHAR",
+          "null_count": 0,
+          "null_pct": 0.0,
+          "distinct_count": 180,
+          "sample_values": [
+            "2017-04-26T00:00:00",
+            "2024-01-12T00:00:00",
+            "2024-03-05T00:00:00",
+            "2023-09-25T00:00:00",
+            "2024-02-08T00:00:00"
+          ]
+        }
+      },
+      "duplicates": {
+        "total_rows": 631,
+        "distinct_student_ids": 230,
+        "duplicate_rows": 401,
+        "has_duplicates": true,
+        "uniqueness_pct": 36.45
+      },
+      "distributions": {}
+    },
+    "enrollment": {
+      "domain": "enrollment",
+      "file_path": "oss_framework/data/stage1/aeries/enrollment/year=2025-2026/part-000.parquet",
+      "timestamp": "2026-02-26T23:54:33.382804",
+      "file_size_bytes": 19027,
+      "row_count": 895,
+      "column_count": 21,
+      "columns": [
+        "StudentID",
+        "InterIntraDistrictStateCode",
+        "NonpublicSchoolStateCode",
+        "NextSchoolCode",
+        "ReportingSchoolCode",
+        "SchoolCode",
+        "StudentNumber",
+        "AcademicYear",
+        "Track",
+        "AttendanceProgramCode",
+        "AttendanceProgramCodeAdditional1",
+        "AttendanceProgramCodeAdditional2",
+        "Grade",
+        "ElementaryTeacherNumber",
+        "ElementaryTeacherName",
+        "EnterDate",
+        "LeaveDate",
+        "ExitReasonCode",
+        "InterIntraDistrictTransferCode",
+        "ExtractedAt",
+        "year"
+      ],
+      "schema": {
+        "StudentID": "BIGINT",
+        "InterIntraDistrictStateCode": "DOUBLE",
+        "NonpublicSchoolStateCode": "DOUBLE",
+        "NextSchoolCode": "BIGINT",
+        "ReportingSchoolCode": "BIGINT",
+        "SchoolCode": "BIGINT",
+        "StudentNumber": "BIGINT",
+        "AcademicYear": "VARCHAR",
+        "Track": "DOUBLE",
+        "AttendanceProgramCode": "VARCHAR",
+        "AttendanceProgramCodeAdditional1": "DOUBLE",
+        "AttendanceProgramCodeAdditional2": "DOUBLE",
+        "Grade": "BIGINT",
+        "ElementaryTeacherNumber": "BIGINT",
+        "ElementaryTeacherName": "VARCHAR",
+        "EnterDate": "VARCHAR",
+        "LeaveDate": "VARCHAR",
+        "ExitReasonCode": "DOUBLE",
+        "InterIntraDistrictTransferCode": "DOUBLE",
+        "ExtractedAt": "VARCHAR",
+        "year": "VARCHAR"
+      },
+      "missing_values": {
+        "total_rows": 895,
+        "columns_with_nulls": {
+          "InterIntraDistrictStateCode": {
+            "null_count": 888,
+            "null_percentage": 99.22
+          },
+          "NonpublicSchoolStateCode": {
+            "null_count": 895,
+            "null_percentage": 100.0
+          },
+          "Track": {
+            "null_count": 895,
+            "null_percentage": 100.0
+          },
+          "AttendanceProgramCode": {
+            "null_count": 837,
+            "null_percentage": 93.52
+          },
+          "AttendanceProgramCodeAdditional1": {
+            "null_count": 895,
+            "null_percentage": 100.0
+          },
+          "AttendanceProgramCodeAdditional2": {
+            "null_count": 895,
+            "null_percentage": 100.0
+          },
+          "ElementaryTeacherName": {
+            "null_count": 672,
+            "null_percentage": 75.08
+          },
+          "LeaveDate": {
+            "null_count": 818,
+            "null_percentage": 91.4
+          },
+          "ExitReasonCode": {
+            "null_count": 818,
+            "null_percentage": 91.4
+          },
+          "InterIntraDistrictTransferCode": {
+            "null_count": 887,
+            "null_percentage": 99.11
+          }
+        },
+        "critical_nulls": {}
+      },
+      "critical_fields": {
+        "StudentID": {
+          "column_name": "StudentID",
+          "found": true,
+          "data_type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0,
+          "distinct_count": 829
+        }
+      },
+      "duplicates": {
+        "total_rows": 895,
+        "distinct_student_ids": 829,
+        "duplicate_rows": 66,
+        "has_duplicates": true,
+        "uniqueness_pct": 92.63
+      },
+      "distributions": {}
+    },
+    "programs": {
+      "domain": "programs",
+      "file_path": "oss_framework/data/stage1/aeries/programs/year=2025-2026/part-000.parquet",
+      "timestamp": "2026-02-26T23:54:33.390696",
+      "file_size_bytes": 24026,
+      "row_count": 2872,
+      "column_count": 11,
+      "columns": [
+        "ExtendedProperties",
+        "StudentID",
+        "ProgramCode",
+        "ProgramDescription",
+        "EligibilityStartDate",
+        "EligibilityEndDate",
+        "ParticipationStartDate",
+        "ParticipationEndDate",
+        "AcademicYear",
+        "ExtractedAt",
+        "year"
+      ],
+      "schema": {
+        "ExtendedProperties": "VARCHAR",
+        "StudentID": "BIGINT",
+        "ProgramCode": "BIGINT",
+        "ProgramDescription": "VARCHAR",
+        "EligibilityStartDate": "VARCHAR",
+        "EligibilityEndDate": "VARCHAR",
+        "ParticipationStartDate": "VARCHAR",
+        "ParticipationEndDate": "VARCHAR",
+        "AcademicYear": "VARCHAR",
+        "ExtractedAt": "VARCHAR",
+        "year": "VARCHAR"
+      },
+      "missing_values": {
+        "total_rows": 2872,
+        "columns_with_nulls": {
+          "EligibilityStartDate": {
+            "null_count": 1026,
+            "null_percentage": 35.72
+          },
+          "EligibilityEndDate": {
+            "null_count": 1487,
+            "null_percentage": 51.78
+          },
+          "ParticipationStartDate": {
+            "null_count": 1658,
+            "null_percentage": 57.73
+          },
+          "ParticipationEndDate": {
+            "null_count": 1760,
+            "null_percentage": 61.28
+          }
+        },
+        "critical_nulls": {}
+      },
+      "critical_fields": {
+        "StudentID": {
+          "column_name": "StudentID",
+          "found": true,
+          "data_type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0,
+          "distinct_count": 657
+        },
+        "ProgramCode": {
+          "column_name": "ProgramCode",
+          "found": true,
+          "data_type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0,
+          "distinct_count": 8
+        }
+      },
+      "duplicates": {
+        "total_rows": 2872,
+        "distinct_student_ids": 657,
+        "duplicate_rows": 2215,
+        "has_duplicates": true,
+        "uniqueness_pct": 22.88
+      },
+      "distributions": {}
+    },
+    "gpa": {
+      "domain": "gpa",
+      "file_path": "oss_framework/data/stage1/aeries/gpa/year=2025-2026/part-000.parquet",
+      "timestamp": "2026-02-26T23:54:33.396973",
+      "file_size_bytes": 44785,
+      "row_count": 851,
+      "column_count": 29,
+      "columns": [
+        "StudentID",
+        "SchoolCode",
+        "ClassRank",
+        "ClassSize",
+        "ClassRank1012",
+        "GPA_CumulativeAcademic",
+        "GPA_CumulativeTotal",
+        "GPA_CumulativeAcademic1012",
+        "GPA_CumulativeAcademicNonWeighted",
+        "GPA_CumulativeTotalNonWeighted",
+        "GPA_CumulativeAcademic1012NonWeighted",
+        "GradePointsCumulative",
+        "GPA_UC_Preliminary",
+        "GPA_CSU_Preliminary",
+        "GPA_CumulativeCitizenship",
+        "GPA_GradeReportingCitizenship",
+        "CreditsAttempted",
+        "CreditsCompleted",
+        "GPA_GradeReportingAcademic",
+        "GPA_GradeReportingTotal",
+        "GPA_GradeReportingAcademicNonWeighted",
+        "GPA_GradeReportingTotalNonWeighted",
+        "GradeReportingClassRank",
+        "GradeReportingClassSize",
+        "GradeReportingCreditsAttempted",
+        "GradeReportingCreditsCompleted",
+        "AcademicYear",
+        "ExtractedAt",
+        "year"
+      ],
+      "schema": {
+        "StudentID": "BIGINT",
+        "SchoolCode": "BIGINT",
+        "ClassRank": "BIGINT",
+        "ClassSize": "BIGINT",
+        "ClassRank1012": "BIGINT",
+        "GPA_CumulativeAcademic": "DOUBLE",
+        "GPA_CumulativeTotal": "DOUBLE",
+        "GPA_CumulativeAcademic1012": "DOUBLE",
+        "GPA_CumulativeAcademicNonWeighted": "DOUBLE",
+        "GPA_CumulativeTotalNonWeighted": "DOUBLE",
+        "GPA_CumulativeAcademic1012NonWeighted": "DOUBLE",
+        "GradePointsCumulative": "DOUBLE",
+        "GPA_UC_Preliminary": "DOUBLE",
+        "GPA_CSU_Preliminary": "DOUBLE",
+        "GPA_CumulativeCitizenship": "DOUBLE",
+        "GPA_GradeReportingCitizenship": "DOUBLE",
+        "CreditsAttempted": "DOUBLE",
+        "CreditsCompleted": "DOUBLE",
+        "GPA_GradeReportingAcademic": "DOUBLE",
+        "GPA_GradeReportingTotal": "DOUBLE",
+        "GPA_GradeReportingAcademicNonWeighted": "DOUBLE",
+        "GPA_GradeReportingTotalNonWeighted": "DOUBLE",
+        "GradeReportingClassRank": "BIGINT",
+        "GradeReportingClassSize": "BIGINT",
+        "GradeReportingCreditsAttempted": "DOUBLE",
+        "GradeReportingCreditsCompleted": "DOUBLE",
+        "AcademicYear": "VARCHAR",
+        "ExtractedAt": "VARCHAR",
+        "year": "VARCHAR"
+      },
+      "missing_values": {
+        "total_rows": 851,
+        "columns_with_nulls": {},
+        "critical_nulls": {}
+      },
+      "critical_fields": {
+        "StudentID": {
+          "column_name": "StudentID",
+          "found": true,
+          "data_type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0,
+          "distinct_count": 851
+        }
+      },
+      "duplicates": {
+        "total_rows": 851,
+        "distinct_student_ids": 851,
+        "duplicate_rows": 0,
+        "has_duplicates": false,
+        "uniqueness_pct": 100.0
+      },
+      "distributions": {}
+    },
+    "grades": {
+      "domain": "grades",
+      "file_path": "oss_framework/data/stage1/aeries/grades_transformed/year=2025-2026/part-000.parquet",
+      "timestamp": "2026-02-26T23:54:33.407213",
+      "file_size_bytes": 89804,
+      "row_count": 14652,
+      "column_count": 28,
+      "columns": [
+        "StudentID",
+        "AcademicYear",
+        "ExtractedAt",
+        "SchoolCode",
+        "CourseID",
+        "CourseTitle",
+        "Period",
+        "SectionNumber",
+        "TeacherNumber",
+        "MP_PrimaryStaffID",
+        "MP_Hours",
+        "MP_AttendanceBasedGradesIndicator",
+        "MP_MarkingPeriod",
+        "MP_Mark",
+        "MP_Credit",
+        "MP_Comment1Code",
+        "MP_Comment2Code",
+        "MP_Comment3Code",
+        "MP_CitizenshipCode",
+        "MP_WorkHabitsCode",
+        "MP_TotalAbsences",
+        "MP_TotalTardies",
+        "MP_TotalDaysEnrolled",
+        "MP_TotalDaysPresent",
+        "MP_TotalExcusedAbsences",
+        "MP_TotalUnExcusedAbsences",
+        "MP_TotalDaysOfSuspension",
+        "year"
+      ],
+      "schema": {
+        "StudentID": "BIGINT",
+        "AcademicYear": "VARCHAR",
+        "ExtractedAt": "VARCHAR",
+        "SchoolCode": "BIGINT",
+        "CourseID": "BIGINT",
+        "CourseTitle": "VARCHAR",
+        "Period": "VARCHAR",
+        "SectionNumber": "BIGINT",
+        "TeacherNumber": "BIGINT",
+        "MP_PrimaryStaffID": "BIGINT",
+        "MP_Hours": "DOUBLE",
+        "MP_AttendanceBasedGradesIndicator": "DOUBLE",
+        "MP_MarkingPeriod": "BIGINT",
+        "MP_Mark": "VARCHAR",
+        "MP_Credit": "DOUBLE",
+        "MP_Comment1Code": "VARCHAR",
+        "MP_Comment2Code": "VARCHAR",
+        "MP_Comment3Code": "VARCHAR",
+        "MP_CitizenshipCode": "VARCHAR",
+        "MP_WorkHabitsCode": "VARCHAR",
+        "MP_TotalAbsences": "BIGINT",
+        "MP_TotalTardies": "BIGINT",
+        "MP_TotalDaysEnrolled": "BIGINT",
+        "MP_TotalDaysPresent": "BIGINT",
+        "MP_TotalExcusedAbsences": "BIGINT",
+        "MP_TotalUnExcusedAbsences": "BIGINT",
+        "MP_TotalDaysOfSuspension": "BIGINT",
+        "year": "VARCHAR"
+      },
+      "missing_values": {
+        "total_rows": 14652,
+        "columns_with_nulls": {
+          "MP_AttendanceBasedGradesIndicator": {
+            "null_count": 14652,
+            "null_percentage": 100.0
+          },
+          "MP_Mark": {
+            "null_count": 1280,
+            "null_percentage": 8.74
+          },
+          "MP_Comment1Code": {
+            "null_count": 8273,
+            "null_percentage": 56.46
+          },
+          "MP_Comment2Code": {
+            "null_count": 12383,
+            "null_percentage": 84.51
+          },
+          "MP_Comment3Code": {
+            "null_count": 14116,
+            "null_percentage": 96.34
+          },
+          "MP_CitizenshipCode": {
+            "null_count": 2058,
+            "null_percentage": 14.05
+          },
+          "MP_WorkHabitsCode": {
+            "null_count": 6105,
+            "null_percentage": 41.67
+          }
+        },
+        "critical_nulls": {}
+      },
+      "critical_fields": {
+        "StudentID": {
+          "column_name": "StudentID",
+          "found": true,
+          "data_type": "BIGINT",
+          "null_count": 0,
+          "null_pct": 0.0,
+          "distinct_count": 630
+        }
+      },
+      "duplicates": {
+        "total_rows": 14652,
+        "distinct_student_ids": 630,
+        "duplicate_rows": 14022,
+        "has_duplicates": true,
+        "uniqueness_pct": 4.3
+      },
+      "distributions": {}
+    }
+  },
+  "issues_found": [
+    "attendance: 4906 duplicate StudentID rows",
+    "discipline: 401 duplicate StudentID rows",
+    "enrollment: 66 duplicate StudentID rows",
+    "programs: 2215 duplicate StudentID rows",
+    "grades: 14022 duplicate StudentID rows"
+  ],
+  "recommendations": []
+}
