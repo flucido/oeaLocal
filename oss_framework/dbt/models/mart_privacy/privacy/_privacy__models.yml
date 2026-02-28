@@ -14,12 +14,15 @@ models:
       
       FERPA Compliance: PII is pseudonymized, suitable for internal analytics
       with proper access controls.
-    
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - student_id_hash
+            - academic_year
     columns:
       - name: student_id_hash
         description: "SHA256 hash of student_id_raw - secure pseudonymous identifier"
         data_tests:
-          - unique
           - not_null
       
       - name: first_name_masked
@@ -71,18 +74,24 @@ models:
       - FERPA-mandated parent requests for student records
       - Compliance audits requiring identity verification
       - Legal discovery requests
-    
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - student_id_hash
+            - academic_year
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - student_id_raw
+            - academic_year
     columns:
       - name: student_id_hash
         description: "SHA256 hashed student ID (join key to pseudonymized models)"
         data_tests:
-          - unique
           - not_null
       
       - name: student_id_raw
         description: "⚠️ SENSITIVE: Raw student identifier"
         data_tests:
-          - unique
           - not_null
       
       - name: first_name_raw

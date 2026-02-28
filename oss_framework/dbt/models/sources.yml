@@ -26,23 +26,23 @@ sources:
           error_after: {count: 14, period: day}
         loaded_at_field: updated_at
         columns:
-          - name: student_id
+          - name: StudentID
             description: Unique student identifier (SIS)
             tests:
               - not_null
-          - name: first_name
+          - name: FirstName
             description: Student first name (PII)
-          - name: last_name
+          - name: LastName
             description: Student last name (PII)
-          - name: date_of_birth
+          - name: Birthdate
             description: Student date of birth (sensitive PII)
-          - name: gender
+          - name: Gender
             description: Gender identity
           - name: ethnicity
             description: Ethnicity/race category
-          - name: grade_level
+          - name: Grade
             description: Current grade (9-12)
-          - name: school_id
+          - name: SchoolCode
             description: School identifier
           - name: special_education
             description: Special education enrollment flag
@@ -72,17 +72,17 @@ sources:
           Raw daily attendance records from Aeries SIS.
           Contains 90,000 records (52.9 per student average) with daily attendance status.
         columns:
-          - name: attendance_id
+          - name: StudentID
             description: Unique attendance record identifier
-          - name: student_id
+          - name: StudentID
             description: Foreign key to students
             tests:
               - not_null
               - relationships:
                   arguments:
                     to: source('raw', 'raw_students')
-                    field: student_id
-          - name: school_id
+                    field: StudentID
+          - name: SchoolCode
             description: School identifier
           - name: attendance_date
             description: Date of attendance record
@@ -112,19 +112,19 @@ sources:
         columns:
           - name: record_id
             description: Unique academic record identifier
-          - name: student_id
+          - name: StudentID
             description: Foreign key to students
             tests:
               - not_null
-          - name: school_id
+          - name: SchoolCode
             description: School identifier
-          - name: course_id
+          - name: CourseID
             description: Course identifier
           - name: section_id
             description: Section/class identifier
           - name: teacher_id
             description: Teacher identifier
-          - name: grade
+          - name: MP_Mark
             description: Letter grade (A, B, C, D, F, etc.)
           - name: score
             description: Numeric score/percentage
@@ -142,13 +142,13 @@ sources:
           Raw discipline incident records from Aeries SIS.
           Contains 4,000 records (2-3 per student average).
         columns:
-          - name: incident_id
+          - name: IncidentID
             description: Unique incident identifier
-          - name: student_id
+          - name: StudentID
             description: Foreign key to students
             tests:
               - not_null
-          - name: school_id
+          - name: SchoolOfIncidentCode
             description: School where incident occurred
           - name: incident_date
             description: Date of incident
@@ -170,15 +170,11 @@ sources:
           Raw course enrollment records from Aeries SIS.
           Contains student enrollment tracking data.
         columns:
-          - name: enrollment_id
-            description: Unique enrollment identifier
-            tests:
-              - not_null
-          - name: student_id
+          - name: StudentID
             description: Foreign key to students
             tests:
               - not_null
-          - name: school_id
+          - name: SchoolCode
             description: School identifier
           - name: school_year
             description: School year
@@ -186,7 +182,7 @@ sources:
             description: Date student enrolled
           - name: withdrawal_date
             description: Date student withdrew
-          - name: grade_level
+          - name: Grade
             description: Grade level
           - name: enrollment_status
             description: Status (active/completed/dropped/failed)

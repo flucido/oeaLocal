@@ -9,7 +9,7 @@
 
 SELECT
     COALESCE(d.ethnicity, 'Unknown') AS race_ethnicity,
-    COALESCE(CAST(d.ell_status AS BOOLEAN), false) AS english_learner,
+    COALESCE(d.ell_program_flag, false) AS english_learner,
     COALESCE(d.special_education_flag, false) AS special_education,
     COALESCE(d.free_reduced_lunch_flag, false) AS economically_disadvantaged,
     

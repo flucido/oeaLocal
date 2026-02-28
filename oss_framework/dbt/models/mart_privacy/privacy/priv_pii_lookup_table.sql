@@ -20,6 +20,7 @@ SELECT
     first_name_raw,
     last_name_raw,
     date_of_birth_raw,
+    academic_year,
     
     -- Access control fields
     'RESTRICTED' as access_level,

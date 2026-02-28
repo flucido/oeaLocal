@@ -31,7 +31,7 @@ SELECT
     END as enrollment_status_derived,
     
     -- Audit
-    se.created_at,
+    CAST(NULL AS TIMESTAMP) as created_at,
     CURRENT_TIMESTAMP as dbt_processed_date
 
 FROM {{ ref('stg_aeries__enrollment') }} se

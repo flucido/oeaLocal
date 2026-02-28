@@ -6,11 +6,15 @@ models:
       Staging model for student demographics and enrollment flags.
       One record per student with standardized column names and data types.
       PII fields (_raw suffix) will be hashed in downstream privacy layer.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - student_id_raw
+            - academic_year
     columns:
       - name: student_id_raw
         description: "Raw student identifier (will be pseudonymized in mart_privacy layer)"
         data_tests:
-          - unique
           - not_null
 
       - name: first_name_raw
@@ -238,6 +242,7 @@ models:
             - incident_id
             - student_id_raw
             - disposition_code
+            - academic_year
     columns:
       - name: incident_id
         description: "Incident identifier (not unique - one incident can involve multiple students)"

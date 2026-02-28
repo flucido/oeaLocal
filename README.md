@@ -9,11 +9,24 @@
 
 `local-data-stack` provides a complete local analytics stack:
 
-- **Data ingestion** from Aeries API and Excel imports
+- **Data ingestion** from Aeries API and Excel imports (multi-year support)
 - **DuckDB + Delta/Parquet** lakehouse storage (all local)
 - **dbt transformations** for data modeling
 - **Rill dashboards** for BI and analytics
 - **Simple orchestration** with Python scripts (no Dagster)
+
+## Dataset
+
+**Current Dataset:** AeriesTestData2_2026
+- **Student-Years:** 5,232 rows (872 unique students across 6 academic years)
+- **Time Range:** 2020-2021 through 2025-2026
+- **Domains:** Students, Attendance, Academic Records, Discipline, Enrollment, Programs, Schools
+- **Format:** Parquet files with year-based partitioning (`oss_framework/data/stage1/aeries/`)
+
+**Data Volume:**
+- Total records: 220,084 rows across all domains
+- Compressed size: 2.69 MB (ZSTD compression)
+- Database: DuckDB (`oss_framework/data/oea.duckdb`, 29 MB)
 
 ## Repository layout
 
@@ -120,6 +133,16 @@ python3 scripts/export_to_rill.py
 # Rill auto-refreshes when Parquet files change
 cd rill_project && rill start
 ```
+
+## dbt Test Results
+
+**Current State (Post-Migration):**
+- ✅ **128/128 tests passing** (100% success rate)
+- ✅ 45/45 dbt models building successfully
+- ✅ Multi-year grain validation across all staging and core models
+- ✅ Privacy layer propagates `academic_year` through all transformations
+
+Run tests: `cd oss_framework/dbt && dbt test`
 
 ## Core docs
 

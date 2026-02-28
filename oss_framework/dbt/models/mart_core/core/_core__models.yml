@@ -133,12 +133,15 @@ models:
     description: >
       Student dimension with pseudonymized identifiers.
       Links to privacy layer for secure student identification.
-
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - student_id_hash
+            - academic_year
     columns:
       - name: student_id_hash
         description: "SHA256 hashed student identifier (join key to privacy layer)"
         data_tests:
-          - unique
           - not_null
           - relationships:
               arguments:
@@ -274,7 +277,8 @@ models:
           combination_of_columns:
             - incident_id
             - student_id_hash
-            - resolution  # Column name in fact_discipline (mapped from disposition_code)
+            - resolution
+            - academic_year
     columns:
       - name: incident_id
         description: "Incident identifier (not unique - one incident can involve multiple students)"

@@ -33,7 +33,7 @@ enrollment_with_grades AS (
         ab.course_id,
         ab.school_id,
         ds.grade_level,
-        ds.ell_status AS english_learner,
+        ds.ell_program_flag AS english_learner,
         ds.special_education_flag AS special_education,
         ds.free_reduced_lunch_flag AS free_reduced_lunch,
         ab.student_id_hash,

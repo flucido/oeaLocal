@@ -29,6 +29,7 @@ SELECT
     race_code_5,
     grade_level,
     school_id,
+    academic_year,
     -- Program participation flags
     special_education_flag,
     ell_status,
@@ -48,7 +49,7 @@ SELECT
     withdrawal_date,
     
     -- Audit
-    created_at,
+    CAST(NULL AS TIMESTAMP) as created_at,
     CURRENT_TIMESTAMP as pseudonymization_timestamp,
     'SHA256_HASHED_AND_MASKED' as pseudonymization_method
 

@@ -14,6 +14,7 @@ SELECT
     {{ hash_pii_secure('sd.student_id_raw') }} as student_id_hash,
     sd.school_id,
     sd.incident_id,
+    sd.academic_year,
     
     -- Incident tracking
     sd.incident_date,
@@ -36,7 +37,7 @@ SELECT
     END as serious_incident_flag,
     
     -- Audit
-    sd.created_at,
+    CAST(NULL AS TIMESTAMP) as created_at,
     CURRENT_TIMESTAMP as dbt_processed_date
 
 FROM {{ ref('stg_aeries__discipline') }} sd

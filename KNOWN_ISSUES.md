@@ -4,6 +4,210 @@ This document tracks known issues discovered during validation and testing. Thes
 
 ---
 
+---
+
+## Multi-Year Dataset Migration (2026-02-27)
+
+### Issue: Missing `academic_year` Column Caused Test Failures
+
+**Status**: RESOLVED ✅ (2026-02-27)  
+**Context**: Migrated from single-year dataset (AeriesTestData, 851 students) to multi-year dataset (AeriesTestData2_2026, 5,232 student-years spanning 2020-2026)
+
+**Symptom**: 
+- Initial test run: 121/128 passing (94.5% success rate)
+- Uniqueness test failures on `student_id_raw` in multiple models
+- Same student appearing 6 times (once per academic year) violated single-column uniqueness
+
+**Root Cause**:  
+Multi-year datasets require `academic_year` column in ALL models (staging → privacy → core) for proper grain definition. Missing year column caused composite keys to fail.
+
+**Models Affected**:
+1. `stg_aeries__students` (staging layer)
+2. `priv_student_hashes` (privacy layer)
+3. `priv_pii_lookup_table` (privacy layer)
+4. `dim_students` (core mart)
+5. `fact_discipline` (core mart)
+
+**Fix Applied**:
+1. Added `academic_year` to all affected models (SQL)
+2. Updated 7 test definitions to use `dbt_utils.unique_combination_of_columns`:
+   ```yaml
+   models:
+     - name: stg_aeries__students
+       data_tests:
+         - dbt_utils.unique_combination_of_columns:
+             combination_of_columns:
+               - student_id_raw
+               - academic_year  # REQUIRED for multi-year grain
+   ```
+
+**Result**: 128/128 tests passing (100% success rate)
+
+**Pattern Learned**:
+> **RULE:** Multi-year datasets require year column in ALL staging models AND downstream models for proper uniqueness grain.
+
+**Prevention**:
+- When adding new staging models, ALWAYS include source year column (`CAST(AcademicYear AS VARCHAR)`)
+- When adding uniqueness tests, ALWAYS include year in composite key for multi-year models
+- Document grain explicitly in model YAML descriptions
+
+---
+
+### Issue: Derived Year Column Created Duplicate Discipline Records
+
+**Status**: RESOLVED ✅ (2026-02-27)  
+**Context**: `stg_aeries__discipline` used `EXTRACT(YEAR FROM IncidentDate)` instead of source `AcademicYear` column
+
+**Symptom**:
+- Same incident appearing in multiple academic years
+- Example: Incident 22632 with `IncidentDate = 2022-05-15` matched both:
+  - AcademicYear 2021-2022 extract (row 1)
+  - AcademicYear 2022-2023 extract (row 2)
+- Derived year (2022) created cross-product duplicates
+
+**Root Cause**:  
+Source system extracts can overlap when incident dates fall near year boundaries. Deriving year from `IncidentDate` doesn't respect the source system's academic year assignment.
+
+**Fix Applied**:
+```sql
+-- BEFORE (WRONG):
+CAST(EXTRACT(YEAR FROM CAST(IncidentDate AS DATE)) AS VARCHAR) as academic_year
+
+-- AFTER (CORRECT):
+CAST(AcademicYear AS VARCHAR) as academic_year
+```
+
+**Pattern Learned**:
+> **RULE:** Always prefer source system's year/period columns over derived dates for temporal grain.
+
+**Prevention**:
+- Use `AcademicYear` column directly from source
+- NEVER derive year from event dates (IncidentDate, AttendanceDate, etc.) for grain definition
+- Reserve derived dates for filtering/reporting only, not grain
+
+---
+
+### Issue: Exact Duplicate Rows in Discipline Data
+
+**Status**: RESOLVED ✅ (2026-02-27)  
+**Context**: Raw discipline data contained 1,978 exact duplicate rows (all columns identical)
+
+**Symptom**:
+- Uniqueness tests failing even after adding `academic_year` to composite key
+- `SELECT COUNT(*) vs. SELECT COUNT(DISTINCT *)` mismatch
+
+**Root Cause**:  
+Source data quality issue — same incident exported multiple times with identical values.
+
+**Fix Applied**:
+```sql
+-- Line 10 of stg_aeries__discipline.sql
+SELECT DISTINCT
+    d.IncidentNumber,
+    -- ... rest of columns
+```
+
+**Pattern Learned**:
+> **RULE:** When source data has exact duplicates, use `SELECT DISTINCT` at staging layer to deduplicate before downstream processing.
+
+**Prevention**:
+- Add row count validation tests comparing source vs. staging
+- Document deduplication in model YAML description
+- Consider adding data quality monitoring for source systems
+
+---
+
+### Issue: dbt-utils Test Syntax — Model Level vs. Column Level
+
+**Status**: RESOLVED ✅ (2026-02-27)  
+**Context**: Initial test definitions placed `unique_combination_of_columns` at column level, causing compilation errors
+
+**Symptom**:
+```
+Compilation Error in test unique_combination_of_columns_...
+  'dbt_utils.unique_combination_of_columns' is not a valid column test
+```
+
+**Root Cause**:  
+`dbt_utils.unique_combination_of_columns` is a **model-level test**, not a column-level test.
+
+**Fix Applied**:
+```yaml
+# ✅ CORRECT (model-level)
+models:
+  - name: stg_aeries__students
+    data_tests:  # Place at MODEL level
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - student_id_raw
+            - academic_year
+
+# ❌ WRONG (column-level)
+columns:
+  - name: student_id_raw
+    data_tests:  # DO NOT place unique_combination here
+      - dbt_utils.unique_combination_of_columns:  # ERROR
+```
+
+**Pattern Learned**:
+> **RULE:** Multi-column uniqueness tests MUST be at model level, NOT column level.
+
+**Prevention**:
+- Review dbt-utils documentation before adding tests
+- Note deprecation warning: Use `arguments:` property instead of top-level arguments in dbt 1.11+
+
+---
+
+### Issue: Rill Partitioned Directories Incompatible with dbt COPY FROM
+
+**Status**: RESOLVED ✅ (2026-02-27)  
+**Context**: `scripts/export_to_rill.py` created partitioned Parquet directories for 3 analytics views
+
+**Symptom**:
+```
+dbt build error: COPY FROM 'chronic_absenteeism_risk.parquet' failed
+File is a directory, expected single Parquet file
+```
+
+**Root Cause**:  
+Export script lines 63-72 enabled partitioning by `school_id`, creating directory structure incompatible with dbt's `COPY FROM` statement.
+
+Created:
+```
+chronic_absenteeism_risk.parquet/
+├── school_id=16/*.parquet
+├── school_id=17/*.parquet
+└── school_id=18/*.parquet
+```
+
+But dbt expects:
+```sql
+COPY FROM '{{ var("rill_data_path") }}/chronic_absenteeism_risk.parquet'
+```
+
+**Fix Applied**:
+1. Commented out partitioning logic (lines 63-72)
+2. Deleted partitioned directories
+3. Re-exported as single Parquet files
+
+**Trade-off**:
+- **Current:** Single files (compatible with dbt COPY FROM)
+- **Alternative:** Partitioning offers 40-60% query speedup in Rill
+- **To enable partitioning:** Would need to change dbt external models to use `read_parquet('path/**')` instead of `COPY FROM`
+
+**Pattern Learned**:
+> **RULE:** Rill Parquet exports must be single files (not partitioned directories) for dbt COPY FROM compatibility.
+
+**Future Optimization**:  
+If partitioning becomes necessary for performance:
+1. Uncomment lines 63-72 in `scripts/export_to_rill.py`
+2. Update `oss_framework/dbt/models/exports/*.sql`:
+   ```sql
+   -- Replace COPY FROM with read_parquet
+   SELECT * FROM read_parquet('{{ var("rill_data_path") }}/chronic_absenteeism_risk.parquet/**')
+   ```
+
+
 ## Rill Alert Schema Changes (v0.82.1) - RESOLVED ✅
 
 **Status**: RESOLVED (2026-02-26)  

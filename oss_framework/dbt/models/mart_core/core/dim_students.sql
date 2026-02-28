@@ -43,6 +43,7 @@ SELECT
     END as is_multi_racial,
     psh.grade_level,
     psh.school_id,
+    psh.academic_year,
     psh.home_language,
     
     -- Program participation flags

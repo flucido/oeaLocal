@@ -25,9 +25,10 @@ Student demographic and enrollment master data.
 - Grade level categorization (Elementary/Middle/High)
 - Enrollment status derivation
 
-**Row Count:** 3,400 students  
-**Grain:** One row per student
+**Row Count:** 5,232 student-years (872 unique students, 2020-2026)
+**Grain:** One row per student per academic year
 
+**IMPORTANT:** Multi-year datasets require `academic_year` column in ALL models (staging → privacy → core) for proper uniqueness grain.
 ### `stg_aeries__attendance`
 Daily attendance records with temporal attributes.
 
@@ -103,7 +104,22 @@ All staging models include:
 **Relationship Tests:**
 - Foreign key integrity to `stg_aeries__students`
 
-**Test Coverage:** 43 tests across 5 models (100% coverage)
+**Test Coverage:** 128 tests across 6 models (100% passing)
+
+**Multi-Year Grain Requirements:**
+- All staging models MUST include `academic_year` column from source `AcademicYear` field
+- Uniqueness tests MUST use `dbt_utils.unique_combination_of_columns` with year included
+- NEVER derive year from event dates (IncidentDate, AttendanceDate) — always use source year column
+- Test pattern:
+  ```yaml
+  models:
+    - name: stg_aeries__students
+      data_tests:
+        - dbt_utils.unique_combination_of_columns:
+            combination_of_columns:
+              - student_id_raw
+              - academic_year  # REQUIRED for multi-year data
+  ```
 
 ### Source Freshness
 
@@ -246,11 +262,17 @@ Consider **table** materialization if:
 
 ## Metrics
 
-**Current State:**
-- ✅ 5 staging models
-- ✅ 43 data tests (100% passing)
+**Current State (Post-Migration):**
+- ✅ 6 staging models (added `academic_year` to all)
+- ✅ 128 data tests (100% passing)
+- ✅ Multi-year grain validation across all models
 - ✅ Source freshness monitoring enabled
 - ✅ 100% column documentation coverage
 - ✅ dbt 1.11 compliant (no deprecation warnings)
 
-Last Updated: 2026-01-28
+**Dataset:** AeriesTestData2_2026
+- 5,232 student-years (872 unique students)
+- 6 academic years: 2020-2021 through 2025-2026
+- 220,084 total records across all domains
+
+Last Updated: 2026-02-27 (Migration to multi-year dataset complete)

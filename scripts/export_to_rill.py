@@ -60,15 +60,16 @@ def get_partition_columns(view_name: str) -> list[str]:
     Returns:
         List of column names to partition by (empty list if no partitioning)
     """
+    # DISABLED: Partitioning creates directories incompatible with dbt COPY FROM
     # Views with school_id dimension benefit from partitioning
-    views_with_school_id = [
-        "main_analytics.v_chronic_absenteeism_risk",
-        "main_analytics.v_class_section_comparison",
-        "main_analytics.v_wellbeing_risk_profiles",
-    ]
-    
-    if view_name in views_with_school_id:
-        return ["school_id"]
+    # views_with_school_id = [
+    #     "main_analytics.v_chronic_absenteeism_risk",
+    #     "main_analytics.v_class_section_comparison",
+    #     "main_analytics.v_wellbeing_risk_profiles",
+    # ]
+    # 
+    # if view_name in views_with_school_id:
+    #     return ["school_id"]
     
     return []
 

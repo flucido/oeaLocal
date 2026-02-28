@@ -41,7 +41,7 @@ SELECT
     sta.absence_rate,
     sta.excused_absence_rate,
     -- Audit
-    sta.created_at,
+    CAST(NULL AS TIMESTAMP) as created_at,
     CURRENT_TIMESTAMP as dbt_processed_date
 
 FROM {{ ref('stg_aeries__attendance') }} sta

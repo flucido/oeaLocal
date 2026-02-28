@@ -52,7 +52,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Configuration
-SOURCE_BASE = Path("/Users/flucido/Desktop/AeRIES test data")
+SOURCE_BASE = Path("/Users/flucido/projects/local-data-stack/AeriesTestData2_2026")
 TARGET_BASE = Path("oss_framework/data/stage1/aeries")
 
 # Domain mappings: (target_name, source_directory, csv_prefix)
@@ -119,12 +119,75 @@ DTYPE_MAPPINGS = {
         "RaceCode3": str,
         "RaceCode4": str,
         "RaceCode5": str,
+        # Additional student codes - preserve leading zeros
+        "NetworkLoginID": str,
+        "RecordsReleaseCode": str,
+        "LanguageFluencyCode": str,
+        "HomeLanguageCode": str,
+        "AttendanceProgramCodePrimary": str,
+        "AttendanceProgramCodeAdditional1": str,
+        "AttendanceProgramCodeAdditional2": str,
+        "LockerNumber": str,
+        "ElementaryTeacherNumber": str,
     },
-    "attendance": {},
-    "discipline": {},
-    "enrollment": {},
+    "attendance": {
+        # Attendance program codes - preserve leading zeros
+        "AttendanceProgramCodePrimary": str,
+        "AttendanceProgramCodeAdditional1": str,
+        "AttendanceProgramCodeAdditional2": str,
+        "ReportingSchoolCode": str,
+    },
+    "discipline": {
+        # Incident identifiers - preserve leading zeros
+        "IncidentID": str,
+        "SequenceNumber": str,
+        "Admin_SequenceNumber": str,
+        # Violation and user codes
+        "ViolationCode1": str,
+        "ViolationCode2": str,
+        "ViolationCode3": str,
+        "ViolationCode4": str,
+        "ViolationCode5": str,
+        "UserCode1": str,
+        "UserCode2": str,
+        "UserCode3": str,
+        "UserCode4": str,
+        "UserCode5": str,
+        "UserCode6": str,
+        "UserCode7": str,
+        "UserCode8": str,
+        "StaffReferral": str,
+    },
+    "enrollment": {
+        # Student and school identifiers - preserve leading zeros
+        "StudentID": str,
+        "StudentNumber": str,
+        "SchoolCode": str,
+        "NextSchoolCode": str,
+        "ReportingSchoolCode": str,
+        # District and state codes
+        "InterIntraDistrictStateCode": str,
+        "NonpublicSchoolStateCode": str,
+        "InterIntraDistrictTransferCode": str,
+        "ExitReasonCode": str,
+        # Attendance program codes
+        "AttendanceProgramCode": str,
+        "AttendanceProgramCodeAdditional1": str,
+        "AttendanceProgramCodeAdditional2": str,
+        # Teacher and track codes
+        "ElementaryTeacherNumber": str,
+        "Track": str,
+    },
     "programs": {},
-    "grades": {},
+    "grades": {
+        # Student and teacher identifiers - preserve leading zeros
+        "StudentID": str,
+        "TeacherNumber": str,
+        "MP_PrimaryStaffID": str,
+        "SectionNumber": str,
+        "Period": str,
+        "CourseID": str,
+    },
     "gpa": {},
 }
 
@@ -208,8 +271,15 @@ class AeriesToParquetPipeline:
             if self.verbose:
                 logger.debug(f"Reading CSV: {csv_file}")
 
-            # Read CSV file
-            df = pd.read_csv(csv_file, dtype=DTYPE_MAPPINGS.get(domain, {}))
+            # Read CSV file with BOM handling
+            df = pd.read_csv(
+                csv_file,
+                dtype=DTYPE_MAPPINGS.get(domain, {}),
+                encoding="utf-8-sig",  # Handle BOM in Excel-exported CSVs
+                na_values=["", "NULL", "N/A", "NA", "None", " "],
+                keep_default_na=True,
+            )
+            # Old line removed - using enhanced version above
             rows_read = len(df)
 
             if self.verbose:
