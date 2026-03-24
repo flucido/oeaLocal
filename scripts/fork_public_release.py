@@ -69,7 +69,7 @@ def safe_extract_archive(archive_path: Path, target_dir: Path) -> None:
                 raise RuntimeError(
                     f"Refusing to extract archive member outside target directory: {member.name}"
                 )
-        archive.extractall(target_dir)
+        archive.extractall(target_dir, filter="data")
 
 
 def export_branch_snapshot(source_repo: Path, source_branch: str, target_dir: Path) -> None:
