@@ -52,8 +52,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Configuration
-SOURCE_BASE = Path("/Users/flucido/projects/local-data-stack/AeriesTestData2_2026")
-TARGET_BASE = Path("oss_framework/data/stage1/aeries")
+SOURCE_BASE = Path(os.getenv("AERIES_SOURCE_PATH", "oss_framework/data/sample_data"))
+TARGET_BASE = Path(os.getenv("STAGE1_PATH", "oss_framework/data/stage1")) / "aeries"
 
 # Domain mappings: (target_name, source_directory, csv_prefix)
 # target_name: how it appears in output directory and CLI

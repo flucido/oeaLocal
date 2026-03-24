@@ -5,7 +5,7 @@
 
 WITH source AS (
     SELECT * FROM read_csv(
-        '/Users/flucido/projects/openedDataEstate/oss_framework/data/raw/public_schools/pubschls.txt',
+        '{{ env_var("CDE_PUBLIC_SCHOOLS_PATH", "../data/raw/public_schools/pubschls.txt") }}',
         delim = '\t',
         header = true,
         auto_detect = false,

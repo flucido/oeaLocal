@@ -8,6 +8,7 @@ Phase 4: Sign-off
 """
 
 import json
+import os
 import time
 import random
 from datetime import datetime
@@ -62,7 +63,7 @@ class Phase1FunctionalTesting:
             import duckdb
 
             conn = duckdb.connect(
-                "/Users/flucido/projects/openedDataEstate/oss_framework/data/oea.duckdb",
+                os.getenv("DUCKDB_DATABASE_PATH", "./oss_framework/data/oea.duckdb"),
                 read_only=True,
             )
 

@@ -1,7 +1,8 @@
+{% set rill_export_dir = env_var('RILL_EXPORT_DIR', '../../rill_project/data') %}
 {{
   config(
     materialized='external',
-    location='/Users/flucido/projects/local-data-stack/rill_project/data/equity_outcomes_by_demographics.parquet',
+    location=rill_export_dir ~ '/equity_outcomes_by_demographics.parquet',
     format='parquet',
     tags=['rill_export']
   )

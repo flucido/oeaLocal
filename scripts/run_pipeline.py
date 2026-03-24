@@ -13,6 +13,7 @@ No cloud dependencies. All processing happens locally with DuckDB.
 import os
 import sys
 import subprocess
+import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -36,6 +37,7 @@ class PipelineOrchestrator:
     def __init__(self, dbt_project_dir: Optional[str] = None, enable_metrics: bool = True):
         self.project_root = project_root
         self.dbt_project_dir = dbt_project_dir or self.project_root / "oss_framework" / "dbt"
+        self.dbt_executable = os.getenv("DBT_COMMAND") or shutil.which("dbt") or "dbt"
         self.start_time = datetime.now()
         
         # Initialize metrics collector
@@ -103,6 +105,10 @@ class PipelineOrchestrator:
             self.log(f"✗ Exception: {description} - {str(e)}", "ERROR")
             return False
 
+    def dbt_command(self, args: str) -> str:
+        """Build a dbt command using the current environment."""
+        return f"{self.dbt_executable} {args} --project-dir . --profiles-dir ."
+
     def stage1_ingestion(self) -> bool:
         """
         Stage 1: Ingest raw data from external sources.
@@ -153,8 +159,8 @@ class PipelineOrchestrator:
         self.log("=== STAGE 2: DATA REFINEMENT ===")
 
         return self.run_command(
-            "/Users/flucido/projects/local-data-stack/.venv/bin/dbt run --project-dir . --profiles-dir . --select tag:staging",
-            "/Users/flucido/projects/local-data-stack/.venv/bin/dbt refinement models (staging layer)",
+            self.dbt_command("run --select tag:staging"),
+            "dbt refinement models (staging layer)",
             workdir=self.dbt_project_dir,
         )
 
@@ -173,32 +179,32 @@ class PipelineOrchestrator:
 
         # Seed required mapping tables first
         success = self.run_command(
-            "/Users/flucido/projects/local-data-stack/.venv/bin/dbt seed --project-dir . --profiles-dir . --select school_cds_mapping_seed",
-            "/Users/flucido/projects/local-data-stack/.venv/bin/dbt seed school mapping table",
+            self.dbt_command("seed --select school_cds_mapping_seed"),
+            "dbt seed school mapping table",
             workdir=self.dbt_project_dir,
         )
 
         # Build privacy layer required by core marts
         if success:
             success = success and self.run_command(
-                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt run --project-dir . --profiles-dir . --select mart_privacy",
-                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt privacy pseudonymization models",
+                self.dbt_command("run --select mart_privacy"),
+                "dbt privacy pseudonymization models",
                 workdir=self.dbt_project_dir,
             )
 
         # Run core marts
         if success:
             success = success and self.run_command(
-                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt run --project-dir . --profiles-dir . --select mart_core",
-                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt core dimension/fact tables",
+                self.dbt_command("run --select mart_core"),
+                "dbt core dimension/fact tables",
                 workdir=self.dbt_project_dir,
             )
 
         # Then features, scoring, and analytics
         if success:
             success = success and self.run_command(
-                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt run --project-dir . --profiles-dir . --select mart_features mart_scoring mart_analytics",
-                "/Users/flucido/projects/local-data-stack/.venv/bin/dbt analytics models",
+                self.dbt_command("run --select mart_features mart_scoring mart_analytics"),
+                "dbt analytics models",
                 workdir=self.dbt_project_dir,
             )
 
@@ -228,7 +234,11 @@ class PipelineOrchestrator:
         """Run dbt tests to validate data quality."""
         self.log("=== RUNNING DATA QUALITY TESTS ===")
 
-        return self.run_command("/Users/flucido/projects/local-data-stack/.venv/bin/dbt test", "/Users/flucido/projects/local-data-stack/.venv/bin/dbt data quality tests", workdir=self.dbt_project_dir)
+        return self.run_command(
+            self.dbt_command("test"),
+            "dbt data quality tests",
+            workdir=self.dbt_project_dir,
+        )
 
     def run_full_pipeline(self, skip_tests: bool = False) -> bool:
         """
