@@ -1,7 +1,7 @@
 type: connector
 name: local_duckdb
 driver: duckdb
-dsn: "/Users/flucido/projects/local-data-stack/oss_framework/data/oea.duckdb"
+dsn: '{{ env "RILL_DUCKDB_DSN" "../oss_framework/data/oea.duckdb" }}'
 init_sql: |
   INSTALL delta;
   LOAD delta;

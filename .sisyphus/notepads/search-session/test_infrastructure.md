@@ -1,2 +1,0 @@
-
-## Appended header

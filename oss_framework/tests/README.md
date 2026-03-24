@@ -117,7 +117,7 @@ All tests use standardized fixtures from `conftest.py`:
 
 ### Run all tests with coverage
 ```bash
-cd /Users/flucido/projects/openedDataEstate/oss_framework
+cd /path/to/local-data-stack/oss_framework
 pytest --cov=oss_framework --cov-report=html
 ```
 

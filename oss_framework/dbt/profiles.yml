@@ -3,41 +3,37 @@
 
 duckdb_oss:
   target: 'dev'
-  
+
   outputs:
-    # Development environment
     dev:
       type: 'duckdb'
-      path: '../data/oea.duckdb'
+      path: "{{ env_var('DUCKDB_DATABASE_PATH', '../data/oea.duckdb') }}"
       threads: 4
       timeout_seconds: 300
-      
-      # DuckDB-specific settings
+
       settings:
         threads: 4
         memory_limit: '8GB'
         max_memory: '8GB'
         default_null_order: 'nulls_last'
-      
-      # Extensions to load
+
       extensions:
         - delta
         - httpfs
         - json
-    
-    # Production environment
+
     prod:
       type: 'duckdb'
-      path: '../data/oea.duckdb'
+      path: "{{ env_var('DUCKDB_DATABASE_PATH', '../data/oea.duckdb') }}"
       threads: 8
       timeout_seconds: 300
-      
+
       settings:
         threads: 8
         memory_limit: '16GB'
         max_memory: '16GB'
         default_null_order: 'nulls_last'
-      
+
       extensions:
         - delta
         - httpfs

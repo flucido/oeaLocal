@@ -259,9 +259,7 @@ class K8sDeployment:
 def main():
     """Main deployment entry point"""
     deployer = K8sDeployment()
-    success = deployer.deploy(
-        "/Users/flucido/projects/openedDataEstate/k8s-deployment.yaml"
-    )
+    success = deployer.deploy("k8s-deployment.yaml")
     sys.exit(0 if success else 1)
 
 

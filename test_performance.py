@@ -4,6 +4,7 @@ Performance Testing Suite for Dashboards
 Validates response times meet SLA targets: p95 <2s, p99 <3s
 """
 
+import os
 import time
 import duckdb
 import statistics
@@ -15,7 +16,9 @@ import threading
 class PerformanceTest:
     def __init__(
         self,
-        duckdb_path: str = "/Users/flucido/projects/openedDataEstate/oss_framework/data/oea.duckdb",
+        duckdb_path: str = os.getenv(
+            "DUCKDB_DATABASE_PATH", "./oss_framework/data/oea.duckdb"
+        ),
     ):
         self.db_path = duckdb_path
         self.results = {"queries": {}}

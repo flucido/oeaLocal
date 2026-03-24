@@ -1,48 +1,53 @@
+# Python caches and virtual environments
 __pycache__/
 *.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
 .venv/
 venv/
-data/
 
-# bv (beads viewer) local config and caches
-.bv/
-.beads/
-
-# macOS
-.DS_Store
-
-# Environment files (contain credentials)
+# Environment files
 .env
 
-# Firebase
-firebase-debug.log
+# Local databases and generated data
+*.duckdb
+*.db
+*.db.wal
+*.parquet
+*.zip
+AeriesTestData2_2026/
+data/
+rill_project/tmp/
 
-# Metabase sample database
-*.db.mv.db
+# Keep the public sample data and empty data directories
+!oss_framework/data/
+oss_framework/data/**
+!oss_framework/data/.gitkeep
+!oss_framework/data/stage1/
+!oss_framework/data/stage1/.gitkeep
+!oss_framework/data/stage2/
+!oss_framework/data/stage2/.gitkeep
+!oss_framework/data/stage3/
+!oss_framework/data/stage3/.gitkeep
+!oss_framework/data/sample_data/
+!oss_framework/data/sample_data/*.parquet
 
-# IDE
+# dbt / coverage artifacts
+oss_framework/dbt/dbt_packages/
+oss_framework/dbt/logs/
+oss_framework/dbt/target/
+.coverage
+coverage.xml
+htmlcov/
+
+# OS / editor noise
+.DS_Store
 .idea/
 .vscode/
 *.swp
 *.swo
 
-# Build artifacts
-target/
+# Logs
 logs/
 *.log
-.coverage
-
-# DuckDB databases (local dev only)
-*.duckdb
-*.db
-!*.db.mv.db  # Keep Metabase sample DB
-
-# Python cache
-__pycache__/
-.pytest_cache/
-.mypy_cache/
-
-# Rill temporary files
-rill_project/tmp/
-rill_project/**/*.db.wal
-coverage.xml

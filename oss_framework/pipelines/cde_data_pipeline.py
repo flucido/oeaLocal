@@ -29,7 +29,7 @@ class CDEDataLoader:
     def __init__(self, data_dir: str = ""):
         self.data_dir = data_dir or os.getenv(
             "CDE_DATA_PATH",
-            "/Users/flucido/projects/openedDataEstate/oss_framework/data/raw",
+            "oss_framework/data/raw",
         )
 
     def _read_tsv_file(
