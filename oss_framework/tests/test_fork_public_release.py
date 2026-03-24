@@ -44,7 +44,7 @@ def test_fork_public_release_creates_fresh_repository(tmp_path) -> None:
             "--target-dir",
             str(export_repo),
             "--remote-url",
-            "https://github.com/example/local-data-stack.git",
+            "https://github.com/example/public-release.git",
             "--skip-validation",
         ],
         check=True,
@@ -60,5 +60,5 @@ def test_fork_public_release_creates_fresh_repository(tmp_path) -> None:
     assert git("rev-list", "--count", "HEAD", cwd=export_repo) == "1"
     assert (
         git("remote", "get-url", "origin", cwd=export_repo)
-        == "https://github.com/example/local-data-stack.git"
+        == "https://github.com/example/public-release.git"
     )

@@ -124,7 +124,7 @@ def initialize_repository(
             "-c",
             "user.name=Public Release Export",
             "-c",
-            "user.email=public-release-export@local.invalid",
+            "user.email=public-release-export@noreply.local",
             "commit",
             "-m",
             f"Initial import from {source_branch}",
