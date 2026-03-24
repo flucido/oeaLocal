@@ -112,6 +112,24 @@ python -m black --check oss_framework
 
 The full repository suite still has pre-existing issues unrelated to the public-release sanitization work, so the focused release test above is the canonical safeguard added in this change.
 
+## Fork the public-release branch into a new repository
+
+If you want to spin `copilot/public-release` into its own project, use the export helper below. It validates the sanitized snapshot, copies only tracked files from that branch, and creates a brand-new git history in the target directory so the new repo does not inherit the private repository history.
+
+```bash
+python scripts/fork_public_release.py \
+  --source-branch copilot/public-release \
+  --target-dir /path/to/local-data-stack \
+  --remote-url https://github.com/<owner>/local-data-stack.git
+```
+
+After the script finishes, push the new repository with:
+
+```bash
+cd /path/to/local-data-stack
+git push -u origin main
+```
+
 ## License
 
 - Code: [MIT License](LICENSE)
