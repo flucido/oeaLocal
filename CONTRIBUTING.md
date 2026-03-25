@@ -27,14 +27,14 @@ We welcome several types of contributions:
 
 ### 🐛 Bug Reports
 
-- Search [existing issues](https://github.com/flucido/openedDataEstate/issues) first
+- Search [existing issues](https://github.com/flucido/local-data-stack/issues) first
 - Use the bug report template
 - Include reproduction steps, expected vs. actual behavior
 - Provide system information (OS, Python version, Docker version)
 
 ### ✨ Feature Requests
 
-- Search [existing feature requests](https://github.com/flucido/openedDataEstate/issues?q=is%3Aissue+label%3Aenhancement)
+- Search [existing feature requests](https://github.com/flucido/local-data-stack/issues?q=is%3Aissue+label%3Aenhancement)
 - Describe the use case and benefits for school districts
 - Consider implementation approach (optional)
 
@@ -67,8 +67,8 @@ We welcome several types of contributions:
 
 ```bash
 # 1. Fork and clone the repository
-git clone https://github.com/YOUR_USERNAME/openedDataEstate.git
-cd openedDataEstate/oss_framework
+git clone https://github.com/YOUR_USERNAME/local-data-stack.git
+cd local-data-stack/oss_framework
 
 # 2. Create a virtual environment
 python -m venv venv
@@ -357,8 +357,8 @@ Fixes #123
 ### Getting Help
 
 - **Documentation**: Start with [oss_framework/docs/](oss_framework/docs/README.md)
-- **Discussions**: [GitHub Discussions](https://github.com/flucido/openedDataEstate/discussions)
-- **Issues**: [GitHub Issues](https://github.com/flucido/openedDataEstate/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/flucido/local-data-stack/discussions)
+- **Issues**: [GitHub Issues](https://github.com/flucido/local-data-stack/issues)
 
 ### Communication Channels
 
@@ -387,7 +387,7 @@ By contributing to this project, you agree that your contributions will be licen
 
 If you have questions about contributing, please:
 1. Check the [documentation](oss_framework/docs/README.md)
-2. Search [existing discussions](https://github.com/flucido/openedDataEstate/discussions)
+2. Search [existing discussions](https://github.com/flucido/local-data-stack/discussions)
 3. Open a new discussion
 
 Thank you for contributing to OSS Framework! 🎉
