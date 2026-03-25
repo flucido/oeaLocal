@@ -34,6 +34,7 @@ oss_framework/data/**
 !oss_framework/data/sample_data/*.parquet
 
 # dbt / coverage artifacts
+.user.yml
 oss_framework/dbt/dbt_packages/
 oss_framework/dbt/logs/
 oss_framework/dbt/target/
